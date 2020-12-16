@@ -8,4 +8,4 @@ from spinup import sac_pytorch #sac_tf1 should work with tensorflow 1, if you pr
 
 env = gym.make('Safexp-PointGoal1-v0')
 
-sac_pytorch(lambda: env,epochs=1000,alpha=0.2)
+sac_pytorch(lambda: env,epochs=250,alpha=0.2)

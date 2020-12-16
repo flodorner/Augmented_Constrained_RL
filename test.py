@@ -1,3 +1,5 @@
+#Test if SAC is able to deal with the safety-gym environments when constraints are ignored.
+
 #Install safety gym (requires Mujoco-py: https://github.com/openai/mujoco-py), openai gym, spinup (https://spinningup.openai.com/en/latest/) and pytorch first
 
 import safety_gym

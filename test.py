@@ -7,8 +7,14 @@ import gym
 from spinup import sac_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead...
 
 env = gym.make('Safexp-PointGoal1-v0')
-def provide_env():
-    env.reset()
-    return env 
+env.stepb = env.step
+def res_step(action):
+   if env.done:
+      env.reset()
+   return env.stepb(action)
 
-sac_pytorch(provide_env,epochs=250,alpha=0.2)
+env.step = res_step
+
+
+
+sac_pytorch(lambda: env,epochs=250,alpha=0.2)

@@ -5,7 +5,7 @@ import numpy as np
 
 
 class constraint_wrapper:
-    def __init__(self, env,penalty=10,threshold=25):
+    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None):
         self.base_env = env
         low = np.concatenate([env.observation_space.low,np.array([0])])
         high = np.concatenate([env.observation_space.high,np.array([np.inf])])
@@ -14,10 +14,13 @@ class constraint_wrapper:
         self.total_rews = []
         self.total_costs = []
         self.t = -1
-        self.penalty = penalty
+        self.add_penalty = add_penalty
         self.threshold = threshold
+        self.keep_add_penalty = keep_add_penalty
+        self.mult_penalty = mult_penalty
 
     def reset(self):
+        self.penalty_given = False
         if self.t > 0:
             self.total_rews.append(self.reward_counter)
             self.total_costs.append(self.cost_counter)
@@ -33,7 +36,13 @@ class constraint_wrapper:
         self.reward_counter += reward
         self.cost_counter += info["cost"]
         self.t += 1
-        return np.concatenate([obs, [self.cost_counter]]), reward-self.penalty*(self.cost_counter>self.threshold) ,done, None
+        if self.mult_penalty is not None:
+            if self.cost_counter>self.threshold:
+                reward = reward * self.mult_penalty
+        r_mod = reward-self.add_penalty*(self.cost_counter>self.threshold)*(self.keep_add_penalty or not self.penalty_given)
+        if not self.keep_add_penalty:
+            self.penalty_given = self.cost_counter>self.threshold
+        return np.concatenate([obs, [self.cost_counter]]), r_mod,done, None
 
 
 class safetygymwrapper:
@@ -41,7 +50,7 @@ class safetygymwrapper:
         self.base_env = env
     def reset(self):
         return self.base_env.reset()
-    def step(self):
+    def step(self,action):
         obs, reward, done, info = self.base_env.step(action)
         cost = info["cost"] 
         return obs, np.array([reward,cost]),done,None

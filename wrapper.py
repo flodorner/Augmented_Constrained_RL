@@ -1,5 +1,40 @@
 import gym
+from gym.spaces import Box
 import numpy as np
+
+
+
+class constraint_wrapper:
+    def __init__(self, env,penalty=10,threshold=25):
+        self.base_env = env
+        low = np.concatenate([env.observation_space.low,np.array([0])])
+        high = np.concatenate([env.observation_space.high,np.array([np.inf])])
+        self.observation_space = Box(low=low,high=high,dtype=np.float32)
+        self.action_space = env.action_space
+        self.total_rews = []
+        self.total_costs = []
+        self.t = -1
+        self.penalty = penalty
+        self.threshold = threshold
+
+    def reset(self):
+        if self.t > 0:
+            self.total_rews.append(self.reward_counter)
+            self.total_costs.append(self.cost_counter)
+        obs = self.base_env.reset()
+        self.t = 0
+        self.cost_counter = 0
+        self.reward_counter = 0
+        return np.concatenate([obs, [self.cost_counter]])
+    def step(self,action):
+        if self.base_env.done:
+            self.base_env.reset()
+        obs, reward, done, info = self.base_env.step(action)
+        self.reward_counter += reward
+        self.cost_counter += info["cost"]
+        self.t += 1
+        return np.concatenate([obs, [self.cost_counter]]), reward-self.penalty*(self.cost_counter>self.threshold) ,done, None
+
 
 class safetygymwrapper:
     def __init__(self, env):
@@ -8,7 +43,7 @@ class safetygymwrapper:
         return self.base_env.reset()
     def step(self):
         obs, reward, done, info = self.base_env.step(action)
-        cost = info["cost"]
+        cost = info["cost"] 
         return obs, np.array([reward,cost]),done,None
 
 class fwrapper:
@@ -18,7 +53,7 @@ class fwrapper:
         self.f = f
         low = np.concatenate([env.observation_space.low,np.array([0]+[-np.inf for i in self.fdims])])
         high = np.concatenate([env.observation_space.high,np.array([np.inf]+[np.inf for i in self.fdims])])
-        self.observation_space = gym.spaces.box(low=low,high=high,dtype=np.float32)
+        self.observation_space = Box(low=low,high=high,dtype=np.float32)
         self.action_space = env.action_space
         #
         if type(gamma) == float or type(gamma) == int:

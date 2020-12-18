@@ -2,13 +2,23 @@ import gym
 from gym.spaces import Box
 import numpy as np
 
-
+def bucketize(x,n_buckets,max_x):
+    out = np.zeros(n_buckets)
+    for i in range(1,n_buckets+1):
+        if x>i*max_x/n_buckets:
+            out[i-1]=1
+    return out
 
 class constraint_wrapper:
-    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None):
+    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None):
         self.base_env = env
-        low = np.concatenate([env.observation_space.low,np.array([0])])
-        high = np.concatenate([env.observation_space.high,np.array([np.inf])])
+        self.buckets = buckets
+        if self.buckets is None:
+            low = np.concatenate([env.observation_space.low,np.array([0])])
+            high = np.concatenate([env.observation_space.high,np.array([np.inf])])
+        else:
+            low = np.concatenate([env.observation_space.low,np.array([0 for i in range(self.buckets)])])
+            high = np.concatenate([env.observation_space.high,np.array([np.inf for i in range(self.buckets)])])
         self.observation_space = Box(low=low,high=high,dtype=np.float32)
         self.action_space = env.action_space
         self.total_rews = []
@@ -19,7 +29,6 @@ class constraint_wrapper:
         self.keep_add_penalty = keep_add_penalty
         self.mult_penalty = mult_penalty
         self.cost_penalty = cost_penalty
-
     def reset(self):
         self.penalty_given = False
         if self.t > 0:
@@ -29,7 +38,10 @@ class constraint_wrapper:
         self.t = 0
         self.cost_counter = 0
         self.reward_counter = 0
-        return np.concatenate([obs, [self.cost_counter]])
+        if self.buckets is None:
+            return np.concatenate([obs, [self.cost_counter]])
+        else:
+            return np.concatenate([obs, bucketize(self.cost_counter,self.buckets,self.threshold)])
     def step(self,action):
         if self.base_env.done:
             self.base_env.reset()
@@ -45,7 +57,10 @@ class constraint_wrapper:
             r_mod = r_mod - (self.cost_counter>self.threshold)*info["cost"]*self.cost_penalty
         if not self.keep_add_penalty:
             self.penalty_given = self.cost_counter>self.threshold
-        return np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]]), r_mod,done, None
+        if self.buckets is None:
+            return np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]]), r_mod,done, None
+        else:
+            return np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)]), r_mod, done, None
 
 
 class safetygymwrapper:

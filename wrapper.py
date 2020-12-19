@@ -9,6 +9,7 @@ def bucketize(x,n_buckets,max_x):
             out[i-1]=1
     return out
 
+#Add option to stack observations? (obstacles seem to be moving...)
 class constraint_wrapper:
     def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None):
         self.base_env = env
@@ -61,6 +62,8 @@ class constraint_wrapper:
             return np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]]), r_mod,done, None
         else:
             return np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)]), r_mod, done, None
+    def render(self, mode='human'):
+        return self.base_env.render(mode,camera_id=1)
 
 
 class safetygymwrapper:

@@ -11,7 +11,8 @@ def bucketize(x,n_buckets,max_x):
 
 #Add option to stack observations? (obstacles seem to be moving...)
 class constraint_wrapper:
-    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None):
+    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,
+                 buckets=None,cost_penalty_always=False):
         self.base_env = env
         self.buckets = buckets
         if self.buckets is None:
@@ -30,6 +31,7 @@ class constraint_wrapper:
         self.keep_add_penalty = keep_add_penalty
         self.mult_penalty = mult_penalty
         self.cost_penalty = cost_penalty
+        self.cost_penalty_always=cost_penalty_always
     def reset(self):
         self.penalty_given = False
         if self.t > 0:
@@ -55,7 +57,7 @@ class constraint_wrapper:
                 reward = reward * self.mult_penalty
         r_mod = reward-self.add_penalty*(self.cost_counter>self.threshold)*(self.keep_add_penalty or not self.penalty_given)
         if self.cost_penalty is not None:
-            r_mod = r_mod - (self.cost_counter>self.threshold)*info["cost"]*self.cost_penalty
+            r_mod = r_mod - (self.cost_counter>self.threshold or self.cost_penalty_always)*info["cost"]*self.cost_penalty
         if not self.keep_add_penalty:
             self.penalty_given = self.cost_counter>self.threshold
         if self.buckets is None:

@@ -9,9 +9,9 @@ from spinup.utils.test_policy import load_policy_and_env, run_policy
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import os
-import datetime
+from datetime import datetime
 
-def main(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,epochs=30,start_steps=10000,filename=""):
+def main(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,epochs=30,start_steps=10000,cost_penalty_always=False,filename=""):
     if mult_penalty == -1:
         mult_penalty = None
     if cost_penalty == -1:
@@ -20,7 +20,7 @@ def main(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=N
         buckets = None
     env = gym.make('Safexp-PointGoal1-v0')
     env = constraint_wrapper(env,add_penalty=add_penalty,keep_add_penalty=keep_add_penalty,mult_penalty=mult_penalty,
-                             cost_penalty=cost_penalty,buckets=buckets)
+                             cost_penalty=cost_penalty,buckets=buckets,cost_penalty_always=cost_penalty_always)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3"
     if alg == "sac":
@@ -35,13 +35,15 @@ def main(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=N
         pickle.dump(env.total_costs, f)
 
     _, get_action = load_policy_and_env("results/"+filename+"policy")
-    o = env.reset()
     frames = []
 
-    for i in range(1000):
-        frames.append(env.render(mode="rgb_array"))
-        a = get_action(o)
-        o, r, d, _ = env.step(a)
+    for i in range(5):
+        o = env.reset()
+        for i in range(1000):
+            frames.append(env.render(mode="rgb_array"))
+            a = get_action(o)
+            o, r, d, _ = env.step(a)
+        
     plt.figure(figsize=(frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi=72)
     plt.axis('off')
     patch = plt.imshow(frames[0])
@@ -57,6 +59,7 @@ if __name__ == "__main__":
     parser.add_argument('--alpha', type=float, default=0.02)
     parser.add_argument('--add_penalty', type=float, default=1)
     parser.add_argument('--keep_add_penalty', type=bool, default=False)
+    parser.add_argument('--cost_penalty_always', type=bool, default=False)
     parser.add_argument('--mult_penalty', type=float, default=-1)
     parser.add_argument('--cost_penalty', type=float, default=-1)
     parser.add_argument('--buckets', type=int, default=-1)
@@ -69,4 +72,4 @@ if __name__ == "__main__":
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)
-    main(args.alg,args.alpha,args.add_penalty,args.keep_add_penalty,args.mult_penalty,args.cost_penalty,args.buckets,args.epochs,args.start_steps,filename)
+    main(args.alg,args.alpha,args.add_penalty,args.keep_add_penalty,args.mult_penalty,args.cost_penalty,args.buckets,args.epochs,args.start_steps,args.cost_penalty_always,filename)

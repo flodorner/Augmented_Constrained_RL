@@ -82,20 +82,20 @@ if __name__ == "__main__":
     parser.add_argument('--alg', type=str, default="sac")
     parser.add_argument('--alpha', type=float, default=0.02)
     parser.add_argument('--add_penalty', type=float, default=1)
-    parser.add_argument('--keep_add_penalty', type=bool, default=False)
-    parser.add_argument('--cost_penalty_always', type=bool, default=False)
+    parser.add_argument('--keep_add_penalty', type=int, default=0)
+    parser.add_argument('--cost_penalty_always', type=int, default=0)
     parser.add_argument('--mult_penalty', type=float, default=-1)
     parser.add_argument('--cost_penalty', type=float, default=-1)
     parser.add_argument('--buckets', type=int, default=-1)
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--start_steps', type=int, default=10000)
-    parser.add_argument('--split_policy', type=bool, default=False)
+    parser.add_argument('--split_policy', type=int, default=0)
     parser.add_argument('--name', type=str, default="")
 
     args = parser.parse_args()
-    filename = args.name + datetime.now().strftime("%m_%d_%Y__%H_%M_%S")  + "/"
+    filename =  datetime.now().strftime("%m_%d_%Y__%H_%M_%S")  + args.name + "/"
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)
-    run_exp(args.alg,args.alpha,args.add_penalty,args.keep_add_penalty,args.mult_penalty,args.cost_penalty,args.buckets,
-         args.epochs,args.start_steps,args.cost_penalty_always,args.split_policy,filename)
+    run_exp(args.alg,args.alpha,args.add_penalty,bool(args.keep_add_penalty),args.mult_penalty,args.cost_penalty,args.buckets,
+         args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),filename)

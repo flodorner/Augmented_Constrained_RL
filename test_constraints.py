@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import os
 from datetime import datetime
+import torch
 
 def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,
          epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
@@ -50,6 +51,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     with open("results/"+filename+"costs.pkl", 'wb') as f:
         pickle.dump(env.total_costs, f)
 
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     _, get_action = load_policy_and_env("results/"+filename+"policy",deterministic=True)
     frames = []
 
@@ -57,7 +59,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         o = env.reset()
         for i in range(1000):
             frames.append(env.render(mode="rgb_array"))
-            a = get_action(o)
+            a = get_action(o.to(device))
             o, r, d, _ = env.step(a)
     if alg=="sac":
         _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=False)
@@ -65,7 +67,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
             o = env.reset()
             for i in range(1000):
                 frames.append(env.render(mode="rgb_array"))
-                a = get_action(o)
+                a = get_action(o.to(device))
                 o, r, d, _ = env.step(a)
 
         

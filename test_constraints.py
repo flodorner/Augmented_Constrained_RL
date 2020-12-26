@@ -1,7 +1,6 @@
 import safety_gym
 import gym
 from spinup import sac_pytorch,td3_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
-
 import sys
 from wrapper import constraint_wrapper
 import pickle
@@ -13,8 +12,8 @@ import os
 from datetime import datetime
 
 def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,
-         epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,filename=""
-            ,steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
+         epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
+            filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
 
     if mult_penalty == -1:
         mult_penalty = None
@@ -35,7 +34,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         else:
             actor_critic = core.MLPActorCritic
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
-                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic)
+                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs)
     elif alg == "td3":
         import spinup.algos.pytorch.td3.core as core
         if split_policy:
@@ -43,7 +42,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         else:
             actor_critic = core.MLPActorCritic
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
-                    actor_critic=actor_critic,num_test_episodes=num_test_episodes,act_noise=act_noise)
+                    actor_critic=actor_critic,num_test_episodes=num_test_episodes,act_noise=act_noise,ac_kwargs=ac_kwargs)
 
     #Ideally, you would separate train and test runs more directly here rather than reylying on the alg to work exactly as described...
     with open("results/"+filename+"rews.pkl", 'wb') as f:
@@ -90,6 +89,8 @@ if __name__ == "__main__":
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--start_steps', type=int, default=10000)
     parser.add_argument('--split_policy', type=int, default=0)
+    parser.add_argument('--hid', type=int, default=256)
+    parser.add_argument('--l', type=int, default=2)
     parser.add_argument('--name', type=str, default="")
 
     args = parser.parse_args()
@@ -97,5 +98,6 @@ if __name__ == "__main__":
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)
+
     run_exp(args.alg,args.alpha,args.add_penalty,bool(args.keep_add_penalty),args.mult_penalty,args.cost_penalty,args.buckets,
-         args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),filename)
+         args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),dict(hidden_sizes=[args.hid] * args.l),filename)

@@ -1,7 +1,7 @@
 import safety_gym
 import gym
 from spinup import sac_pytorch,td3_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
-import spinup.algos.pytorch.td3.core as core
+
 import sys
 from wrapper import constraint_wrapper
 import pickle
@@ -16,8 +16,6 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
          epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,filename=""
             ,steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
 
-    assert not split_policy or alg == "td3"
-
     if mult_penalty == -1:
         mult_penalty = None
     if cost_penalty == -1:
@@ -31,9 +29,15 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3"
     if alg == "sac":
+        import spinup.algos.pytorch.sac.core as core
+        if split_policy:
+            actor_critic = core.MLPActorCriticSplit
+        else:
+            actor_critic = core.MLPActorCritic
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
-                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes)
+                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic)
     elif alg == "td3":
+        import spinup.algos.pytorch.td3.core as core
         if split_policy:
             actor_critic = core.MLPActorCriticSplit
         else:

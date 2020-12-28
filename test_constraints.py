@@ -59,7 +59,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         o = env.reset()
         for i in range(1000):
             frames.append(env.render(mode="rgb_array"))
-            a = get_action(o.to(device))
+            a = get_action(torch.tensor(o).to(device))
             o, r, d, _ = env.step(a)
     if alg=="sac":
         _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=False)
@@ -67,7 +67,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
             o = env.reset()
             for i in range(1000):
                 frames.append(env.render(mode="rgb_array"))
-                a = get_action(o.to(device))
+                a = get_action(torch.tensor(o).to(device))
                 o, r, d, _ = env.step(a)
 
         
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument('--cost_penalty', type=float, default=-1)
     parser.add_argument('--buckets', type=int, default=-1)
     parser.add_argument('--epochs', type=int, default=30)
-    parser.add_argument('--start_steps', type=int, default=10000)
+    parser.add_argument('--start_steps', type=int, default=100000)
     parser.add_argument('--split_policy', type=int, default=0)
     parser.add_argument('--hid', type=int, default=256)
     parser.add_argument('--l', type=int, default=2)

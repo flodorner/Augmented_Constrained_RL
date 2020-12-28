@@ -1,6 +1,8 @@
 import gym
 from gym.spaces import Box
 import numpy as np
+from spinup.utils.test_policy import load_policy_and_env
+import torch
 
 def bucketize(x,n_buckets,max_x):
     out = np.zeros(n_buckets)
@@ -12,7 +14,7 @@ def bucketize(x,n_buckets,max_x):
 #Add option to stack observations? (obstacles seem to be moving...)
 class constraint_wrapper:
     def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,
-                 buckets=None,cost_penalty_always=False):
+                 buckets=None,cost_penalty_always=False,safe_policy=False):
         self.base_env = env
         self.buckets = buckets
         if self.buckets is None:
@@ -32,6 +34,10 @@ class constraint_wrapper:
         self.mult_penalty = mult_penalty
         self.cost_penalty = cost_penalty
         self.cost_penalty_always=cost_penalty_always
+        if safe_policy is not False:
+            self.safe_policy = load_policy_and_env(self.safe_policy)
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
     def reset(self):
         self.penalty_given = False
         if self.t > 0:
@@ -42,12 +48,17 @@ class constraint_wrapper:
         self.cost_counter = 0
         self.reward_counter = 0
         if self.buckets is None:
-            return np.concatenate([obs, [self.cost_counter]])
+            self.obs_old = np.concatenate([obs, [self.cost_counter]])
         else:
-            return np.concatenate([obs, bucketize(self.cost_counter,self.buckets,self.threshold)])
+            self.obs_old = np.concatenate([obs, bucketize(self.cost_counter,self.buckets,self.threshold)])
+        return self.obs_old
+
     def step(self,action):
         if self.base_env.done:
             self.base_env.reset()
+        if self.safe_policy is not False:
+            if self.cost_counter >= self.threshold:
+                action = self.safe_policy(torch.tensor(self.obs_old).to(self.device))
         obs, reward, done, info = self.base_env.step(action)
         self.reward_counter += reward
         self.cost_counter += info["cost"]
@@ -61,9 +72,10 @@ class constraint_wrapper:
         if not self.keep_add_penalty:
             self.penalty_given = self.cost_counter>self.threshold
         if self.buckets is None:
-            return np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]]), r_mod,done, None
+            self.obs_old = np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]])
         else:
-            return np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)]), r_mod, done, None
+            self.obs_old = np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)])
+        return self.obs_old, r_mod, done, None
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
 

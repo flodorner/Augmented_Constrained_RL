@@ -63,7 +63,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         import spinup.algos.pytorch.ppo.core as core
         assert not split_policy
         actor_critic = core.MLPActorCritic
-        ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch, start_steps=start_steps,
+        ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch,
                     logger_kwargs=logger_kwargs,
                     actor_critic=actor_critic, num_test_episodes=num_test_episodes,  ac_kwargs=ac_kwargs)
 

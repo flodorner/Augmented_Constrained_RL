@@ -35,7 +35,7 @@ class constraint_wrapper:
         self.cost_penalty = cost_penalty
         self.cost_penalty_always=cost_penalty_always
         if safe_policy is not False:
-            self.safe_policy = load_policy_and_env(self.safe_policy)
+            _,self.safe_policy = load_policy_and_env(safe_policy)
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def reset(self):

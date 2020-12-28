@@ -1,6 +1,6 @@
 import safety_gym
 import gym
-from spinup import sac_pytorch,td3_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
+from spinup import sac_pytorch,td3_pytorch,ppo_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
 import sys
 from wrapper import constraint_wrapper
 import pickle
@@ -42,7 +42,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     env = constraint_wrapper(env,add_penalty=add_penalty,keep_add_penalty=keep_add_penalty,mult_penalty=mult_penalty,
                              cost_penalty=cost_penalty,buckets=buckets,cost_penalty_always=cost_penalty_always,safe_policy=safe_policy)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
-    assert alg == "sac" or alg == "td3"
+    assert alg == "sac" or alg == "td3" or alg == "ppo"
     if alg == "sac":
         import spinup.algos.pytorch.sac.core as core
         if split_policy:
@@ -59,6 +59,13 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
             actor_critic = core.MLPActorCritic
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
                     actor_critic=actor_critic,num_test_episodes=num_test_episodes,act_noise=act_noise,ac_kwargs=ac_kwargs)
+    elif alg == "ppo":
+        import spinup.algos.pytorch.ppo.core as core
+        assert not split_policy
+        actor_critic = core.MLPActorCritic
+        ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch, start_steps=start_steps,
+                    logger_kwargs=logger_kwargs,
+                    actor_critic=actor_critic, num_test_episodes=num_test_episodes,  ac_kwargs=ac_kwargs)
 
     #Ideally, you would separate train and test runs more directly here rather than reylying on the alg to work exactly as described...
     with open("results/"+filename+"rews.pkl", 'wb') as f:

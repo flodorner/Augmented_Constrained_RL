@@ -14,7 +14,8 @@ import torch
 
 def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,
          epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
-            use_safe_policy=False,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
+            safe_policy=False,entropy_constraint=None,collector_policy=None,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
+
     # alg determines wheter sac or td3 is used.
     #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal. If keep_add_penalty is true,
     # beta is subtracted from the reward at each step after the constraint is violated, not just the first time.
@@ -30,13 +31,18 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     # is violated. filename determines, where in the results folder the results and trained policy get saved to.
     # Steps_per epoch determines the amount of environment interaction per epoch. Num_test episodes the amount of test_episodes
     # (only for evaluation) that are performed after each epoch. act_noise controls the exploration noise used in the td3 algorithm.
-    #
+    # Entropy_constraint is the entropy to aim for (if sac is used with trainable alpha)
+    # Collector_policy specifies
     if mult_penalty == -1:
         mult_penalty = None
     if cost_penalty == -1:
         cost_penalty = None
     if buckets == -1:
         buckets = None
+    if entropy_constraint == 0:
+        entropy_constraint = None
+    if alpha == 0:
+        alpha = None
 
     env = gym.make('Safexp-PointGoal1-v0')
     env = constraint_wrapper(env,add_penalty=add_penalty,keep_add_penalty=keep_add_penalty,mult_penalty=mult_penalty,
@@ -50,7 +56,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         else:
             actor_critic = core.MLPActorCritic
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
-                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs)
+                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs,entropy_constraint=entropy_constraint,collector_policy=collector_policy)
     elif alg == "td3":
         import spinup.algos.pytorch.td3.core as core
         if split_policy:
@@ -58,10 +64,11 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         else:
             actor_critic = core.MLPActorCritic
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
-                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs)
+                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy)
     elif alg == "ppo":
         import spinup.algos.pytorch.ppo.core as core
         assert not split_policy
+        assert collector_policy==None
         actor_critic = core.MLPActorCritic
         ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch,
                     logger_kwargs=logger_kwargs,
@@ -103,7 +110,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', type=str, default="sac")
-    parser.add_argument('--alpha', type=float, default=0.02)
+    parser.add_argument('--alpha', type=float, default=0)
     parser.add_argument('--add_penalty', type=float, default=1)
     parser.add_argument('--keep_add_penalty', type=int, default=0)
     parser.add_argument('--cost_penalty_always', type=int, default=0)
@@ -116,6 +123,8 @@ if __name__ == "__main__":
     parser.add_argument('--hid', type=int, default=256)
     parser.add_argument('--l', type=int, default=2)
     parser.add_argument('--safe_policy', type=str, default="")
+    parser.add_argument('--collector_policy', type=str, default="")
+    parser.add_argument('--entropy_constraint', type=int, default=-1)
     parser.add_argument('--name', type=str, default="")
 
     args = parser.parse_args()
@@ -123,9 +132,17 @@ if __name__ == "__main__":
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)
+
     if len(args.safe_policy)>0:
         safe_policy=args.safe_policy
     else:
         safe_policy = False
-    run_exp(args.alg,args.alpha,args.add_penalty,bool(args.keep_add_penalty),args.mult_penalty,args.cost_penalty,args.buckets,
-         args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),dict(hidden_sizes=[args.hid] * args.l),safe_policy,filename)
+    if len(args.collector_policy)>0:
+        collector_policy=args.collector_policy
+    else:
+        collector_policy = None
+    run_exp(alg=args.alg,alpha=args.alpha,add_penalty=args.add_penalty,keep_add_penalty=bool(args.keep_add_penalty),
+            mult_penalty=args.mult_penalty,cost_penalty=args.cost_penalty,buckets=args.buckets,
+         epochs=args.epochs,start_steps=args.start_steps,cost_penalty_always=bool(args.cost_penalty_always),split_policy=bool(args.split_policy),
+            ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
+            entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename)

@@ -77,7 +77,7 @@ class constraint_wrapper:
             self.obs_old = np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]])
         else:
             self.obs_old = np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)])
-        return self.obs_old, r_mod, done, None
+        return self.obs_old, r_mod, done, info
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
 

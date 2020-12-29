@@ -1,0 +1,163 @@
+Namespace(add_penalty=1, alg='sac', alpha=0.02, buckets=-1, cost_penalty=-1, cost_penalty_always=False, epochs=30, keep_add_penalty=False, mult_penalty=-1, name='', start_steps=10000)
+[32;1mLogging data to results/12_24_2020__12_26_59/policy/progress.txt[0m
+[36;1mSaving config:
+[0m
+{
+    "ac_kwargs":	{},
+    "actor_critic":	"MLPActorCritic",
+    "alpha":	0.02,
+    "batch_size":	100,
+    "env_fn":	"<function main.<locals>.<lambda> at 0x7fedd105e1e0>",
+    "epochs":	30,
+    "exp_name":	"12_24_2020__12_26_59/policy",
+    "gamma":	0.99,
+    "logger":	{
+        "<spinup.utils.logx.EpochLogger object at 0x7feded7c2eb8>":	{
+            "epoch_dict":	{},
+            "exp_name":	"12_24_2020__12_26_59/policy",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"results/12_24_2020__12_26_59/policy",
+            "output_file":	{
+                "<_io.TextIOWrapper name='results/12_24_2020__12_26_59/policy/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"12_24_2020__12_26_59/policy",
+        "output_dir":	"results/12_24_2020__12_26_59/policy"
+    },
+    "lr":	0.001,
+    "max_ep_len":	1000,
+    "num_test_episodes":	10,
+    "polyak":	0.995,
+    "replay_size":	1000000,
+    "save_freq":	1,
+    "seed":	0,
+    "start_steps":	10000,
+    "steps_per_epoch":	10001,
+    "update_after":	1000,
+    "update_every":	50
+}
+[32;1m
+Number of parameters: 	 pi: 82692, 	 q1: 82433, 	 q2: 82433
+[0m
+---------------------------------------
+|             Epoch |               1 |
+|      AverageEpRet |          -0.295 |
+|          StdEpRet |           0.447 |
+|          MaxEpRet |           0.408 |
+|          MinEpRet |           -1.07 |
+|  AverageTestEpRet |           -10.5 |
+|      StdTestEpRet |            13.3 |
+|      MaxTestEpRet |            1.76 |
+|      MinTestEpRet |           -27.6 |
+|             EpLen |           1e+03 |
+|         TestEpLen |           1e+03 |
+| TotalEnvInteracts |           1e+04 |
+|     AverageQ1Vals |            0.57 |
+|         StdQ1Vals |             0.3 |
+|         MaxQ1Vals |            1.47 |
+|         MinQ1Vals |          -0.516 |
+|     AverageQ2Vals |            0.57 |
+|         StdQ2Vals |             0.3 |
+|         MaxQ2Vals |            1.47 |
+|         MinQ2Vals |          -0.422 |
+|      AverageLogPi |           -1.32 |
+|          StdLogPi |           0.343 |
+|          MaxLogPi |            3.51 |
+|          MinLogPi |           -6.84 |
+|            LossPi |          -0.595 |
+|             LossQ |         0.00104 |
+|              Time |             460 |
+---------------------------------------
+---------------------------------------
+|             Epoch |               2 |
+|      AverageEpRet |            1.79 |
+|          StdEpRet |            3.36 |
+|          MaxEpRet |            7.68 |
+|          MinEpRet |           -4.54 |
+|  AverageTestEpRet |            1.14 |
+|      StdTestEpRet |            1.49 |
+|      MaxTestEpRet |            4.73 |
+|      MinTestEpRet |          0.0417 |
+|             EpLen |           1e+03 |
+|         TestEpLen |           1e+03 |
+| TotalEnvInteracts |           2e+04 |
+|     AverageQ1Vals |            1.37 |
+|         StdQ1Vals |           0.209 |
+|         MaxQ1Vals |            3.01 |
+|         MinQ1Vals |         -0.0165 |
+|     AverageQ2Vals |            1.37 |
+|         StdQ2Vals |           0.209 |
+|         MaxQ2Vals |            3.02 |
+|         MinQ2Vals |         -0.0198 |
+|      AverageLogPi |           -1.28 |
+|          StdLogPi |           0.434 |
+|          MaxLogPi |            2.95 |
+|          MinLogPi |           -7.21 |
+|            LossPi |           -1.39 |
+|             LossQ |        0.000834 |
+|              Time |             966 |
+---------------------------------------
+---------------------------------------
+|             Epoch |               3 |
+|      AverageEpRet |            5.87 |
+|          StdEpRet |            3.28 |
+|          MaxEpRet |            11.1 |
+|          MinEpRet |             1.5 |
+|  AverageTestEpRet |            1.44 |
+|      StdTestEpRet |            1.27 |
+|      MaxTestEpRet |            4.26 |
+|      MinTestEpRet |          -0.137 |
+|             EpLen |           1e+03 |
+|         TestEpLen |           1e+03 |
+| TotalEnvInteracts |           3e+04 |
+|     AverageQ1Vals |            1.87 |
+|         StdQ1Vals |           0.213 |
+|         MaxQ1Vals |            3.33 |
+|         MinQ1Vals |           0.106 |
+|     AverageQ2Vals |            1.87 |
+|         StdQ2Vals |           0.213 |
+|         MaxQ2Vals |            3.26 |
+|         MinQ2Vals |           0.165 |
+|      AverageLogPi |           -1.22 |
+|          StdLogPi |           0.544 |
+|          MaxLogPi |             3.3 |
+|          MinLogPi |           -7.38 |
+|            LossPi |            -1.9 |
+|             LossQ |         0.00166 |
+|              Time |        1.49e+03 |
+---------------------------------------
+---------------------------------------
+|             Epoch |               4 |
+|      AverageEpRet |            7.39 |
+|          StdEpRet |            3.83 |
+|          MaxEpRet |            13.3 |
+|          MinEpRet |            1.98 |
+|  AverageTestEpRet |            6.47 |
+|      StdTestEpRet |            8.07 |
+|      MaxTestEpRet |            14.9 |
+|      MinTestEpRet |           -14.1 |
+|             EpLen |           1e+03 |
+|         TestEpLen |           1e+03 |
+| TotalEnvInteracts |           4e+04 |
+|     AverageQ1Vals |            2.19 |
+|         StdQ1Vals |            0.27 |
+|         MaxQ1Vals |            3.51 |
+|         MinQ1Vals |           0.182 |
+|     AverageQ2Vals |            2.19 |
+|         StdQ2Vals |            0.27 |
+|         MaxQ2Vals |            3.53 |
+|         MinQ2Vals |           0.343 |
+|      AverageLogPi |           -1.18 |
+|          StdLogPi |           0.605 |
+|          MaxLogPi |            2.68 |
+|          MinLogPi |           -7.58 |
+|            LossPi |           -2.21 |
+|             LossQ |         0.00205 |
+|              Time |        1.97e+03 |
+---------------------------------------

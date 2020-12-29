@@ -12,7 +12,7 @@ import os
 from datetime import datetime
 import torch
 
-def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,buckets=None,
+def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,cost_threshold=25,buckets=None,
          epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
             use_safe_policy=False,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
     # alg determines wheter sac or td3 is used.
@@ -40,7 +40,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
 
     env = gym.make('Safexp-PointGoal1-v0')
     env = constraint_wrapper(env,add_penalty=add_penalty,keep_add_penalty=keep_add_penalty,mult_penalty=mult_penalty,
-                             cost_penalty=cost_penalty,buckets=buckets,cost_penalty_always=cost_penalty_always,safe_policy=safe_policy)
+                             cost_penalty=cost_penalty,buckets=buckets,cost_penalty_always=cost_penalty_always,safe_policy=safe_policy,threshold=cost_threshold)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3" or alg == "ppo"
     if alg == "sac":
@@ -50,7 +50,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         else:
             actor_critic = core.MLPActorCritic
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
-                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs)
+                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs,cost_threshold=cost_threshold)
     elif alg == "td3":
         import spinup.algos.pytorch.td3.core as core
         if split_policy:
@@ -92,7 +92,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
                 a = get_action(torch.tensor(o).to(device))
                 o, r, d, _ = env.step(a)
 
-        
+
     plt.figure(figsize=(frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi=72)
     plt.axis('off')
     patch = plt.imshow(frames[0])
@@ -102,12 +102,13 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--alg', type=str, default="sac")
+    parser.add_argument('--alg', type=str, default="td3")
     parser.add_argument('--alpha', type=float, default=0.02)
     parser.add_argument('--add_penalty', type=float, default=1)
     parser.add_argument('--keep_add_penalty', type=int, default=0)
     parser.add_argument('--cost_penalty_always', type=int, default=0)
     parser.add_argument('--mult_penalty', type=float, default=-1)
+    parser.add_argument('--cost_threshold', type=float, default=25)
     parser.add_argument('--cost_penalty', type=float, default=-1)
     parser.add_argument('--buckets', type=int, default=-1)
     parser.add_argument('--epochs', type=int, default=30)
@@ -127,5 +128,4 @@ if __name__ == "__main__":
         safe_policy=args.safe_policy
     else:
         safe_policy = False
-    run_exp(args.alg,args.alpha,args.add_penalty,bool(args.keep_add_penalty),args.mult_penalty,args.cost_penalty,args.buckets,
-         args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),dict(hidden_sizes=[args.hid] * args.l),safe_policy,filename)
+    run_exp(args.alg,args.alpha,args.add_penalty,bool(args.keep_add_penalty),args.mult_penalty,args.cost_penalty,args.cost_threshold,args.buckets,args.epochs,args.start_steps,bool(args.cost_penalty_always),bool(args.split_policy),dict(hidden_sizes=[args.hid] * args.l),safe_policy,filename)

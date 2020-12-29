@@ -1,0 +1,51 @@
+{
+    "ac_kwargs":	{
+        "hidden_sizes":	[
+            256,
+            256
+        ]
+    },
+    "act_noise":	0.1,
+    "actor_critic":	"MLPActorCritic",
+    "batch_size":	100,
+    "cost_threshold":	25,
+    "device":	"cpu",
+    "env_fn":	"<function run_exp.<locals>.<lambda> at 0x7f60cb14f840>",
+    "epochs":	30,
+    "exp_name":	"12_29_2020__18_47_11/policy",
+    "gamma":	0.99,
+    "logger":	{
+        "<spinup.utils.logx.EpochLogger object at 0x7f60e78b7b38>":	{
+            "epoch_dict":	{},
+            "exp_name":	"12_29_2020__18_47_11/policy",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"results/12_29_2020__18_47_11/policy",
+            "output_file":	{
+                "<_io.TextIOWrapper name='results/12_29_2020__18_47_11/policy/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"12_29_2020__18_47_11/policy",
+        "output_dir":	"results/12_29_2020__18_47_11/policy"
+    },
+    "max_ep_len":	1000,
+    "noise_clip":	0.5,
+    "num_test_episodes":	10,
+    "pi_lr":	0.001,
+    "policy_delay":	2,
+    "polyak":	0.995,
+    "q_lr":	0.001,
+    "replay_size":	1000000,
+    "save_freq":	1,
+    "seed":	0,
+    "start_steps":	100000,
+    "steps_per_epoch":	10001,
+    "target_noise":	0.2,
+    "update_after":	1000,
+    "update_every":	50
+}

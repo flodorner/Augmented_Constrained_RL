@@ -1,1 +1,0 @@
-Namespace(add_penalty=1, alg='sac', alpha=0.02, buckets=-1, cost_penalty=-1, cost_penalty_always=0, cost_threshold=25, epochs=30, hid=256, keep_add_penalty=0, l=2, mult_penalty=-1, name='', safe_policy='', split_policy=0, start_steps=100000)

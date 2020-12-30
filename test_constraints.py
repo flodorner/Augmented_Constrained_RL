@@ -72,7 +72,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
         actor_critic = core.MLPActorCritic
         ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch,
                     logger_kwargs=logger_kwargs,
-                    actor_critic=actor_critic, num_test_episodes=num_test_episodes,  ac_kwargs=ac_kwargs)
+                    actor_critic=actor_critic, ac_kwargs=ac_kwargs)
 
     #Ideally, you would separate train and test runs more directly here rather than reylying on the alg to work exactly as described...
     with open("results/"+filename+"rews.pkl", 'wb') as f:

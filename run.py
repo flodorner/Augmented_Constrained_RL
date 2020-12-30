@@ -13,35 +13,35 @@ def experiment_1(): #1 day
     name = "sac_a02_ss10k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.2,add_penalty=0,
-            epochs=10,start_steps=10000,filename="results/report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0)
     name = "sac_a02_ss100k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.2,add_penalty=0,
-            epochs=10,start_steps=100000,filename="results/report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0)
     name = "sac_a0002_ss10k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.002,add_penalty=0,
-            epochs=10,start_steps=10000,filename="results/report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0)
     name = "sac_a0002_ss100k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.002,add_penalty=0,
-            epochs=10,start_steps=100000,filename="results/report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0)
     name = "td3_an01_ss10k"
     sys.stdout = open("results/report/experiment_1/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, add_penalty=0,
-            epochs=10, start_steps=10000, filename="results/report/experiment_1/"+ name , buckets=0, act_noise=0.1)
+            epochs=10, start_steps=10000, filename="report/experiment_1/"+ name , buckets=0, act_noise=0.1)
     name = "td3_an01_ss100k"
     sys.stdout = open("results/report/experiment_1/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, add_penalty=0,
-            epochs=10, start_steps=100000, filename="results/report/experiment_1/"+ name , buckets=0, act_noise=0.1)
+            epochs=10, start_steps=100000, filename="report/experiment_1/"+ name , buckets=0, act_noise=0.1)
     name = "td3_an025_ss10k"
     sys.stdout = open("results/report/experiment_1/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, add_penalty=0,
-            epochs=10, start_steps=10000, filename="results/report/experiment_1/"+ name , buckets=0, act_noise=0.25)
+            epochs=10, start_steps=10000, filename="report/experiment_1/"+ name , buckets=0, act_noise=0.25)
     name = "td3_an025_ss100k"
     sys.stdout = open("results/report/experiment_1/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, add_penalty=0,
-            epochs=10, start_steps=100000, filename="results/report/experiment_1/"+ name , buckets=0, act_noise=0.25)
+            epochs=10, start_steps=100000, filename="report/experiment_1/"+ name , buckets=0, act_noise=0.25)
     return None
 
 

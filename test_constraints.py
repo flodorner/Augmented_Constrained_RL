@@ -28,7 +28,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     # such that a second network is used for the policy and q-values when the constraint is violated. ac_kwargs is a dict containing
     # the arguments for the actor-critic class. Hidden sizes is a tuple containing the sizes for all hidden layers.
     # safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint
-    # is violated. filename determines, where in the results folder the results and trained policy get saved to.
+    # is violated. filename determines, where in the results folder the res29541.pts-3.tensorflow-1-vmults and trained policy get saved to.
     # Steps_per epoch determines the amount of environment interaction per epoch. Num_test episodes the amount of test_episodes
     # (only for evaluation) that are performed after each epoch. act_noise controls the exploration noise used in the td3 algorithm.
     # Entropy_constraint is the entropy to aim for (if sac is used with trainable alpha)
@@ -67,9 +67,11 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
                     actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy)
     elif alg == "ppo":
         import spinup.algos.pytorch.ppo.core as core
-        assert not split_policy
         assert collector_policy==None
-        actor_critic = core.MLPActorCritic
+        if split_policy:
+            actor_critic = core.MLPActorCriticSplit
+        else:
+            actor_critic = core.MLPActorCritic
         ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch,
                     logger_kwargs=logger_kwargs,
                     actor_critic=actor_critic, ac_kwargs=ac_kwargs)

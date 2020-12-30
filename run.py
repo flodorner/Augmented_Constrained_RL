@@ -183,6 +183,11 @@ def experiment_3(): #1-2 days?!
 def experiment_4(): #1-2 days?!
     os.mkdir("results/report/experiment_4/")
 
+    name = "ppo_m001_a1_c001_buckets_splitnet"
+    sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')
+    run_exp(alg="ppo", steps_per_epoch=25001, mult_penalty=0.01, add_penalty=1,
+            epochs=10, filename="report/experiment_1/" + name, cost_penalty=0.01,buckets=26,split_policy=True)
+
     name = "sac_c_ss10k_m001_a1_c001_buckets"
     sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -208,11 +213,6 @@ def experiment_4(): #1-2 days?!
     sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')
     run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
             epochs=10, start_steps=10000, filename="report/experiment_1/" + name, cost_penalty=0.01,buckets=26,split_policy=True)
-
-    name = "ppo_m001_a1_c001_buckets_splitnet"
-    sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')
-    run_exp(alg="ppo", steps_per_epoch=25001, mult_penalty=0.01, add_penalty=1,
-            epochs=10, filename="report/experiment_1/" + name, cost_penalty=0.01,buckets=26,split_policy=True)
 
     name = "sac_c_ss10k_m001_a1_c001_buckets_first_layer_512"
     sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')

@@ -43,11 +43,11 @@ def experiment_11():
     name = "sac_c_ss10k"
     sys.stdout = open("results/report/experiment_11/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
-            epochs=10, start_steps=10000, filename="report/experiment_1/" + name, buckets=0 ,entropy_constraint=-1)
+            epochs=10, start_steps=10000, filename="report/experiment_11/" + name, buckets=0 ,entropy_constraint=-1)
     name = "sac_c_ss100k"
     sys.stdout = open("results/report/experiment_11/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
-            epochs=10, start_steps=100000, filename="report/experiment_1/" + name, buckets=0,entropy_constraint=-1)
+            epochs=10, start_steps=100000, filename="report/experiment_11/" + name, buckets=0,entropy_constraint=-1)
 
 def experiment_2(): #1-2 days?!
     os.mkdir("results/report/experiment_2/")

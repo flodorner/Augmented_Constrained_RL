@@ -82,31 +82,7 @@ def run_exp(alg="sac",alpha=0.02,add_penalty=1,keep_add_penalty=True,mult_penalt
     with open("results/"+filename+"costs.pkl", 'wb') as f:
         pickle.dump(env.total_costs, f)
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    _, get_action = load_policy_and_env("results/"+filename+"policy",deterministic=True)
-    frames = []
 
-    for i in range(5):
-        o = env.reset()
-        for i in range(1000):
-            frames.append(env.render(mode="rgb_array"))
-            a = get_action(torch.tensor(o).to(device))
-            o, r, d, _ = env.step(a)
-    if alg=="sac":
-        _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=False)
-        for i in range(5):
-            o = env.reset()
-            for i in range(1000):
-                frames.append(env.render(mode="rgb_array"))
-                a = get_action(torch.tensor(o).to(device))
-                o, r, d, _ = env.step(a)
-
-        
-    plt.figure(figsize=(frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi=72)
-    plt.axis('off')
-    patch = plt.imshow(frames[0])
-    gif = animation.FuncAnimation(plt.gcf(), lambda i: patch.set_data(frames[i]), frames=len(frames), interval=50)
-    gif.save("results/"+filename+"vid.mp4", fps=60)
 
 if __name__ == "__main__":
     import argparse
@@ -148,3 +124,33 @@ if __name__ == "__main__":
          epochs=args.epochs,start_steps=args.start_steps,cost_penalty_always=bool(args.cost_penalty_always),split_policy=bool(args.split_policy),
             ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
             entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename)
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=True)
+    frames = []
+
+    env = gym.make('Safexp-PointGoal1-v0')
+    env = constraint_wrapper(env, add_penalty=args.add_penalty, keep_add_penalty=args.keep_add_penalty, mult_penalty=args.mult_penalty,
+                             cost_penalty=args.cost_penalty, buckets=args.buckets, cost_penalty_always=args.cost_penalty_always,
+                             safe_policy=safe_policy)
+
+    for i in range(5):
+        o = env.reset()
+        for i in range(1000):
+            frames.append(env.render(mode="rgb_array"))
+            a = get_action(torch.tensor(o).to(device))
+            o, r, d, _ = env.step(a)
+    if args.alg == "sac":
+        _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=False)
+        for i in range(5):
+            o = env.reset()
+            for i in range(1000):
+                frames.append(env.render(mode="rgb_array"))
+                a = get_action(torch.tensor(o).to(device))
+                o, r, d, _ = env.step(a)
+
+    plt.figure(figsize=(frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi=72)
+    plt.axis('off')
+    patch = plt.imshow(frames[0])
+    gif = animation.FuncAnimation(plt.gcf(), lambda i: patch.set_data(frames[i]), frames=len(frames), interval=50)
+    gif.save("results/" + filename + "vid.mp4", fps=60)

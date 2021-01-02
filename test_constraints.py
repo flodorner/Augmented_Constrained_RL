@@ -14,7 +14,7 @@ import torch
 
 def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penalty=None,cost_penalty=None,buckets=None,
          epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
-            safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1):
+            safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1, data_aug=False):
 
     # alg determines wheter sac or td3 is used.
     #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal. If keep_add_penalty is true,
@@ -56,7 +56,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penal
         else:
             actor_critic = core.MLPActorCritic
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
-                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs,entropy_constraint=entropy_constraint,collector_policy=collector_policy)
+                    logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs,entropy_constraint=entropy_constraint,collector_policy=collector_policy, data_aug=data_aug)
     elif alg == "td3":
         import spinup.algos.pytorch.td3.core as core
         if split_policy:
@@ -64,7 +64,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penal
         else:
             actor_critic = core.MLPActorCritic
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
-                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy)
+                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy, data_aug=data_aug)
     elif alg == "ppo":
         import spinup.algos.pytorch.ppo.core as core
         assert collector_policy==None
@@ -101,6 +101,7 @@ if __name__ == "__main__":
     parser.add_argument('--hid', type=int, default=256)
     parser.add_argument('--l', type=int, default=2)
     parser.add_argument('--safe_policy', type=str, default="")
+    parser.add_argument('--data_aug', type=str, default="False")
     parser.add_argument('--collector_policy', type=str, default="")
     parser.add_argument('--entropy_constraint', type=int, default=-1)
     parser.add_argument('--name', type=str, default="")
@@ -123,7 +124,7 @@ if __name__ == "__main__":
             mult_penalty=args.mult_penalty,cost_penalty=args.cost_penalty,buckets=args.buckets,
          epochs=args.epochs,start_steps=args.start_steps,cost_penalty_always=bool(args.cost_penalty_always),split_policy=bool(args.split_policy),
             ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
-            entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename)
+            entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename, data_aug=args.data_aug)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=True)

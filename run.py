@@ -234,6 +234,12 @@ def experiment_4(): #1-2 days?!
 def experiment_5(): #2-3 days?!
     #test data augmentation on best identified strategy (sac and td3 if both have a working config).
     #Maybe also test on one other promising parameter configuration.
+    os.mkdir("results/report/experiment_5/")
+
+    name = "sac_c_ss10k_m001_a1_c001"
+    sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True)
     return None
 
 

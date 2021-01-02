@@ -77,9 +77,15 @@ class constraint_wrapper:
             self.obs_old = np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]])
         else:
             self.obs_old = np.concatenate([obs,bucketize(self.cost_counter,self.buckets,self.threshold)])
-        return self.obs_old, r_mod, done, info
+        return self.obs_old, r_mod, done, None
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
+
+    def get_add_cost(self, inc):
+        if self.cost_penalty is not None:
+            return inc*self.cost_penalty
+        else: return 0
+
 
 
 class safetygymwrapper:
@@ -89,7 +95,7 @@ class safetygymwrapper:
         return self.base_env.reset()
     def step(self,action):
         obs, reward, done, info = self.base_env.step(action)
-        cost = info["cost"] 
+        cost = info["cost"]
         return obs, np.array([reward,cost]),done,None
 
 class fwrapper:
@@ -128,9 +134,3 @@ class fwrapper:
         f_rew = (self.f(rewards)-f_old)/(self.gamma_learner**self.t)
         self.t += 1
         return np.concatenate([obs, np.array([self.t]), self.r_disc]), f_rew ,done, None
-
-
-
-
-
-

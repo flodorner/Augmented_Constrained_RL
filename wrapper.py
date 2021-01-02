@@ -81,6 +81,12 @@ class constraint_wrapper:
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
 
+    def get_add_cost(self, inc):
+        if self.cost_penalty is not None:
+            return inc*self.cost_penalty
+        else: return 0
+
+
 
 class safetygymwrapper:
     def __init__(self, env):

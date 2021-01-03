@@ -45,8 +45,8 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penal
         alpha = None
 
     env = gym.make('Safexp-PointGoal1-v0')
-    env = constraint_wrapper(env,add_penalty=add_penalty,keep_add_penalty=keep_add_penalty,mult_penalty=mult_penalty,
-                             cost_penalty=cost_penalty,buckets=buckets,cost_penalty_always=cost_penalty_always,safe_policy=safe_policy)
+    env = constraint_wrapper(env,add_penalty=add_penalty,mult_penalty=mult_penalty,
+                             cost_penalty=cost_penalty,buckets=buckets,safe_policy=safe_policy)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3" or alg == "ppo"
     if alg == "sac":
@@ -90,8 +90,6 @@ if __name__ == "__main__":
     parser.add_argument('--alg', type=str, default="sac")
     parser.add_argument('--alpha', type=float, default=0)
     parser.add_argument('--add_penalty', type=float, default=1)
-    parser.add_argument('--keep_add_penalty', type=int, default=0)
-    parser.add_argument('--cost_penalty_always', type=int, default=0)
     parser.add_argument('--mult_penalty', type=float, default=-1)
     parser.add_argument('--cost_penalty', type=float, default=-1)
     parser.add_argument('--buckets', type=int, default=-1)
@@ -119,9 +117,9 @@ if __name__ == "__main__":
         collector_policy=args.collector_policy
     else:
         collector_policy = None
-    run_exp(alg=args.alg,alpha=args.alpha,add_penalty=args.add_penalty,keep_add_penalty=bool(args.keep_add_penalty),
+    run_exp(alg=args.alg,alpha=args.alpha,add_penalty=args.add_penalty,
             mult_penalty=args.mult_penalty,cost_penalty=args.cost_penalty,buckets=args.buckets,
-         epochs=args.epochs,start_steps=args.start_steps,cost_penalty_always=bool(args.cost_penalty_always),split_policy=bool(args.split_policy),
+         epochs=args.epochs,start_steps=args.start_steps,split_policy=bool(args.split_policy),
             ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
             entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename,data_aug=False)
 
@@ -130,8 +128,8 @@ if __name__ == "__main__":
     frames = []
 
     env = gym.make('Safexp-PointGoal1-v0')
-    env = constraint_wrapper(env, add_penalty=args.add_penalty, keep_add_penalty=args.keep_add_penalty, mult_penalty=args.mult_penalty,
-                             cost_penalty=args.cost_penalty, buckets=args.buckets, cost_penalty_always=args.cost_penalty_always,
+    env = constraint_wrapper(env, add_penalty=args.add_penalty, mult_penalty=args.mult_penalty,
+                             cost_penalty=args.cost_penalty, buckets=args.buckets,
                              safe_policy=safe_policy)
 
     for i in range(5):

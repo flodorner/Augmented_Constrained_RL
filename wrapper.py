@@ -13,8 +13,8 @@ def bucketize(x,n_buckets,max_x):
 
 #Add option to stack observations? (obstacles seem to be moving...)
 class constraint_wrapper:
-    def __init__(self, env,add_penalty=10,threshold=25,keep_add_penalty=True,mult_penalty=None,cost_penalty=None,
-                 buckets=None,cost_penalty_always=False,safe_policy=False):
+    def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=None,cost_penalty=None,
+                 buckets=None,safe_policy=False):
         self.base_env = env
         self.buckets = buckets
         if self.buckets is None:
@@ -30,10 +30,8 @@ class constraint_wrapper:
         self.t = -1
         self.add_penalty = add_penalty
         self.threshold = threshold
-        self.keep_add_penalty = keep_add_penalty
         self.mult_penalty = mult_penalty
         self.cost_penalty = cost_penalty
-        self.cost_penalty_always=cost_penalty_always
         if safe_policy is not False:
             _,self.safe_policy = load_policy_and_env(safe_policy)
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -68,11 +66,10 @@ class constraint_wrapper:
         if self.mult_penalty is not None:
             if self.cost_counter>self.threshold:
                 reward = reward * self.mult_penalty
-        r_mod = reward-self.add_penalty*(self.cost_counter>self.threshold)*(self.keep_add_penalty or not self.penalty_given)
+        r_mod = reward-self.add_penalty*(self.cost_counter>self.threshold)*(not self.penalty_given)
         if self.cost_penalty is not None:
-            r_mod = r_mod - (self.cost_counter>self.threshold or self.cost_penalty_always)*info["cost"]*self.cost_penalty
-        if not self.keep_add_penalty:
-            self.penalty_given = self.cost_counter>self.threshold
+            r_mod = r_mod - (self.cost_counter>self.threshold)*info["cost"]*self.cost_penalty
+        self.penalty_given = self.cost_counter>self.threshold
         if self.buckets is None:
             self.obs_old = np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]])
         else:
@@ -80,11 +77,6 @@ class constraint_wrapper:
         return self.obs_old, r_mod, done, None
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
-
-    def get_add_cost(self, inc):
-        if self.cost_penalty is not None:
-            return inc*self.cost_penalty
-        else: return 0
 
 
 

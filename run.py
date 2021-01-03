@@ -236,15 +236,33 @@ def experiment_5(): #2-3 days?!
     #Maybe also test on one other promising parameter configuration.
     os.mkdir("results/report/experiment_5/")
 
-    name = "sac_c_ss10k_m001_a1_c001"
+    name = "sac_c_ss10k_m001_a1_c001_data_aug"
     sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=10, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True)
+
+    name = "td3_ss10k_m001_a1_c001_data_aug"
+    sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
+    run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_5/" + name, cost_penalty=0.01,data_aug=True)
+
     return None
 
 
 # We can do these all in parallel!
 def experiment_6(): #1-2 days
+    """
+    Claims:
+    SAC outperforms PPO and TD3
+    Alpha not super important
+    Beta and zeta are (is the optimum stable?!)
+    Network architecture does not matter
+    Buckets do matter.
+    Data augmentation with questionable benefits
+
+    """
+
+
     #validate key insights on car goal 1.
     return None
 
@@ -255,6 +273,8 @@ def experiment_7(): #1-2 days
 def experiment_8():  #1-2 days
     # validate key insights on point goal 2
     return None
+
+#Also test alpha=0 plus large penalty?!
 
 def experiment_9(): # 5 days
     # full training on pointgoal1
@@ -275,3 +295,5 @@ if __name__ == "__main__":
         experiment_3()
     if args.id == 4:
         experiment_4()
+    if args.id == 5:
+        experiment_5()

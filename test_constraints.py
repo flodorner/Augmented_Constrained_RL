@@ -64,7 +64,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penal
         else:
             actor_critic = core.MLPActorCritic
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
-                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy,data_aug=data_aug)
+                    actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy,data_aug=data_aug,num_test_episodes=num_test_episodes)
     elif alg == "ppo":
         import spinup.algos.pytorch.ppo.core as core
         assert collector_policy==None

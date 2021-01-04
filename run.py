@@ -237,49 +237,290 @@ def experiment_5(): #2-3 days?!
     name = "sac_c_ss10k_m001_a1_c001_data_aug"
     sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=10, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True,buckets=26)
+            epochs=40, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True,buckets=26)
 
     name = "td3_ss10k_m001_a1_c001_data_aug"
     sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
     run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
-            epochs=10, start_steps=10000, filename="report/experiment_5/" + name, cost_penalty=0.01,data_aug=True,buckets=26)
+            epochs=40, start_steps=10000, filename="report/experiment_5/" + name, cost_penalty=0.01,data_aug=True,buckets=26)
 
     name = "sac_c_ss10k_m001_a1_c001_data_aug_nobuckets"
     sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=10, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True)
+            epochs=40, start_steps=10000, filename="report/experiment_5/" + name, entropy_constraint=-1,cost_penalty=0.01,data_aug=True)
 
     return None
 
+def experiment_6():
+    os.mkdir("results/report/experiment_6/")
 
-# We can do these all in parallel!
-def experiment_6(): #1-2 days
-    """
-    Claims:
-    SAC outperforms PPO and TD3
-    Alpha not super important
-    Beta and zeta are (is the optimum stable?!)
-    Network architecture does not matter
-    Buckets do matter.
-    Data augmentation with questionable benefits
+    name = "sac_c_ss10k_m1_a2"
+    sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=2,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_6/"+ name ,entropy_constraint=-1)
+    name = "sac_c_ss10k_m1_a5"
+    sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=5,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_6/"+ name ,entropy_constraint=-1)
+    name = "sac_c_ss10k_m1_a10"
+    sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_6/"+ name ,entropy_constraint=-1)
 
-    """
+    name = "sac_c_ss10k_m001_a1_long"
+    sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=1,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_6/"+ name ,entropy_constraint=-1)
 
+    name = "sac_c_ss10k_m001_a10_long"
+    sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_6/"+ name ,entropy_constraint=-1)
 
-    #validate key insights on car goal 1.
+    name = "sac_c_ss10k_m001_a1_c001_long"
+    sys.stdout = open("results/report/experiment_6/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_6/" + name, entropy_constraint=-1,
+            cost_penalty=0.01)
+
+    name = "sac_c_ss10k_m001_a1_c01_long"
+    sys.stdout = open("results/report/experiment_6/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_6/" + name, entropy_constraint=-1,
+            cost_penalty=0.1)
+
+    name = "sac_c_ss10k_m001_a0_c01_long"
+    sys.stdout = open("results/report/experiment_6/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_6/" + name, entropy_constraint=-1,
+            cost_penalty=0.1)
+    
     return None
 
 def experiment_7(): #1-2 days
+    os.mkdir("results/report/experiment_7/")
+
+    name = "sac_c_ss10k_m001_a1_c001_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,cost_penalty=0.01,env_name="Safexp-CarGoal1-v0")
+
+    name = "td3_ss10k_m001_a1_c001_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_7/" + name, cost_penalty=0.01,env_name="Safexp-CarGoal1-v0")
+
+    name = "ppo_m001_a1_c001_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="ppo", steps_per_epoch=25001, mult_penalty=0.01, add_penalty=1,
+            epochs=10, filename="report/experiment_7/" + name, cost_penalty=0.01,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_first_layer_512_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,ac_kwargs={"hidden_sizes":(512,256)},env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m1_a2_cargoal"
+    sys.stdout = open("results/report/experiment_7/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=2,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_7/"+ name ,entropy_constraint=-1,env_name="Safexp-CarGoal1-v0")
+    name = "sac_c_ss10k_m1_a5_cargoal"
+    sys.stdout = open("results/report/experiment_7/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=5,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_7/"+ name ,entropy_constraint=-1,env_name="Safexp-CarGoal1-v0")
+    name = "sac_c_ss10k_m1_a10_cargoal"
+    sys.stdout = open("results/report/experiment_7/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_7/"+ name ,entropy_constraint=-1,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a1_cargoal"
+    sys.stdout = open("results/report/experiment_7/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=1,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_7/"+ name ,entropy_constraint=-1,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a10_cargoal"
+    sys.stdout = open("results/report/experiment_7/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_7/"+ name ,entropy_constraint=-1,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,
+            cost_penalty=0.01,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c01_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-CarGoal1-v0")
+
+    name = "sac_c_ss10k_m001_a0_c01_cargoal"
+    sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_7/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-CarGoal1-v0")
+    
+    #validate key insights on car goal 1.
+    return None
+
+def experiment_8(): #1-2 days
+    os.mkdir("results/report/experiment_8/")
+
+    name = "sac_c_ss10k_m001_a1_c001_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,cost_penalty=0.01,env_name="Safexp-PointPush1-v0")
+
+    name = "td3_ss10k_m001_a1_c001_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_8/" + name, cost_penalty=0.01,env_name="Safexp-PointPush1-v0")
+
+    name = "ppo_m001_a1_c001_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="ppo", steps_per_epoch=25001, mult_penalty=0.01, add_penalty=1,
+            epochs=10, filename="report/experiment_8/" + name, cost_penalty=0.01,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_first_layer_512_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,ac_kwargs={"hidden_sizes":(512,256)},env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m1_a2_pointpush"
+    sys.stdout = open("results/report/experiment_8/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=2,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_8/"+ name ,entropy_constraint=-1,env_name="Safexp-PointPush1-v0")
+    name = "sac_c_ss10k_m1_a5_pointpush"
+    sys.stdout = open("results/report/experiment_8/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=5,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_8/"+ name ,entropy_constraint=-1,env_name="Safexp-PointPush1-v0")
+    name = "sac_c_ss10k_m1_a10_pointpush"
+    sys.stdout = open("results/report/experiment_8/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_8/"+ name ,entropy_constraint=-1,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a1_pointpush"
+    sys.stdout = open("results/report/experiment_8/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=1,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_8/"+ name ,entropy_constraint=-1,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a10_pointpush"
+    sys.stdout = open("results/report/experiment_8/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_8/"+ name ,entropy_constraint=-1,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,
+            cost_penalty=0.01,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a1_c01_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-PointPush1-v0")
+
+    name = "sac_c_ss10k_m001_a0_c01_pointpush"
+    sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_8/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-PointPush1-v0")
     # validate key insights on point push 1
     return None
 
-def experiment_8():  #1-2 days
+def experiment_9():  #1-2 days
+    os.mkdir("results/report/experiment_9/")
+    
+    name = "sac_c_ss10k_m001_a1_c001_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,cost_penalty=0.01,env_name="Safexp-PointGoal2-v0")
+
+    name = "td3_ss10k_m001_a1_c001_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_9/" + name, cost_penalty=0.01,env_name="Safexp-PointGoal2-v0")
+
+    name = "ppo_m001_a1_c001_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="ppo", steps_per_epoch=25001, mult_penalty=0.01, add_penalty=1,
+            epochs=10, filename="report/experiment_9/" + name, cost_penalty=0.01,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_buckets_first_layer_512_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=10, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,cost_penalty=0.01,buckets=26,ac_kwargs={"hidden_sizes":(512,256)},env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m1_a2_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=2,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_9/"+ name ,entropy_constraint=-1,env_name="Safexp-PointGoal2-v0")
+    name = "sac_c_ss10k_m1_a5_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=5,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_9/"+ name ,entropy_constraint=-1,env_name="Safexp-PointGoal2-v0")
+    name = "sac_c_ss10k_m1_a10_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=10,start_steps=10000,filename="report/experiment_9/"+ name ,entropy_constraint=-1,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a1_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=1,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_9/"+ name ,entropy_constraint=-1,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a10_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_9/"+ name ,entropy_constraint=-1,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a1_c001_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,
+            cost_penalty=0.01,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a1_c01_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-PointGoal2-v0")
+
+    name = "sac_c_ss10k_m001_a0_c01_pointgoal2"
+    sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_9/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,env_name="Safexp-PointGoal2-v0")
+    
+    
+    
     # validate key insights on point goal 2
     return None
 
-#Also test alpha=0 plus large penalty?!
 
-def experiment_9(): # 5 days
+def experiment_10(): # 5 days
+    # Validate data augmentation on other environments!
+    return None
+
+
+def experiment_10(): # 5 days
     # full training on pointgoal1
     return None
 
@@ -300,3 +541,13 @@ if __name__ == "__main__":
         experiment_4()
     if args.id == 5:
         experiment_5()
+    if args.id == 6:
+        experiment_6()
+    if args.id == 7:
+        experiment_7()
+    if args.id == 8:
+        experiment_8()
+    if args.id == 9:
+        experiment_9()
+    if args.id == 10:
+        experiment_10()

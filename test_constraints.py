@@ -12,19 +12,18 @@ import os
 from datetime import datetime
 import torch
 
-def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penalty=None,cost_penalty=None,buckets=None,
-         epochs=30,start_steps=10000,cost_penalty_always=False,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
-            safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,num_test_episodes=10,act_noise=0.1,data_aug=False):
+def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=None,buckets=None,
+         epochs=30,start_steps=10000,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
+            safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,
+            num_test_episodes=10,act_noise=0.1,data_aug=False,env_name='Safexp-PointGoal1-v0'):
 
     # alg determines wheter sac or td3 is used.
-    #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal. If keep_add_penalty is true,
-    # beta is subtracted from the reward at each step after the constraint is violated, not just the first time.
+    #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal.
     # If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
     # cost_penalty is equal to zeta from the proposal. buckets determines how the accumulated cost is discretized for the agent:
     #if it is None, cost is a continouos variable, else there are buckets indicator variables for a partition of [0,constraint]
     # (with the last only activating if the constraint is violated). Epochs indicates, how many epochs to train for, start_steps indicates
-    # how many random exploratory actions to perform before using the trained policy. If cost_penalty_always is True,
-    # the penalty for incurring costs is also applied before the constraint is violated. Split_policy changes the network architecture
+    # how many random exploratory actions to perform before using the trained policy. Split_policy changes the network architecture
     # such that a second network is used for the policy and q-values when the constraint is violated. ac_kwargs is a dict containing
     # the arguments for the actor-critic class. Hidden sizes is a tuple containing the sizes for all hidden layers.
     # safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint
@@ -44,7 +43,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,keep_add_penalty=False,mult_penal
     if alpha == 0:
         alpha = None
 
-    env = gym.make('Safexp-PointGoal1-v0')
+    env = gym.make(env_name)
     env = constraint_wrapper(env,add_penalty=add_penalty,mult_penalty=mult_penalty,
                              cost_penalty=cost_penalty,buckets=buckets,safe_policy=safe_policy)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
@@ -101,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('--safe_policy', type=str, default="")
     parser.add_argument('--collector_policy', type=str, default="")
     parser.add_argument('--entropy_constraint', type=int, default=-1)
+    parser.add_argument('--env_name', type=str, default='Safexp-PointGoal1-v0')
     parser.add_argument('--name', type=str, default="")
 
     args = parser.parse_args()
@@ -121,7 +121,8 @@ if __name__ == "__main__":
             mult_penalty=args.mult_penalty,cost_penalty=args.cost_penalty,buckets=args.buckets,
          epochs=args.epochs,start_steps=args.start_steps,split_policy=bool(args.split_policy),
             ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
-            entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename,data_aug=False)
+            entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename,data_aug=False,
+            env_name=args.env_name)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=True)

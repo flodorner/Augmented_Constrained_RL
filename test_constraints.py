@@ -12,7 +12,7 @@ import os
 from datetime import datetime
 import torch
 
-def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=None,buckets=None,
+def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,buckets=None,
          epochs=30,start_steps=10000,split_policy=False,ac_kwargs={"hidden_sizes":(256,256)},
             safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,
             num_test_episodes=10,act_noise=0.1,data_aug=False,env_name='Safexp-PointGoal1-v0'):
@@ -34,8 +34,6 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=No
     # Collector_policy specifies
     if mult_penalty == -1:
         mult_penalty = None
-    if cost_penalty == -1:
-        cost_penalty = None
     if buckets == -1:
         buckets = None
     if entropy_constraint == 0:
@@ -90,7 +88,7 @@ if __name__ == "__main__":
     parser.add_argument('--alpha', type=float, default=0)
     parser.add_argument('--add_penalty', type=float, default=1)
     parser.add_argument('--mult_penalty', type=float, default=-1)
-    parser.add_argument('--cost_penalty', type=float, default=-1)
+    parser.add_argument('--cost_penalty', type=float, default=0)
     parser.add_argument('--buckets', type=int, default=-1)
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--start_steps', type=int, default=100000)

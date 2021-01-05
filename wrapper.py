@@ -13,7 +13,7 @@ def bucketize(x,n_buckets,max_x):
 
 #Add option to stack observations? (obstacles seem to be moving...)
 class constraint_wrapper:
-    def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=None,cost_penalty=None,
+    def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=None,cost_penalty=0,
                  buckets=None,safe_policy=False):
         self.base_env = env
         self.buckets = buckets
@@ -67,8 +67,7 @@ class constraint_wrapper:
             if self.cost_counter>self.threshold:
                 reward = reward * self.mult_penalty
         r_mod = reward-self.add_penalty*(self.cost_counter>self.threshold)*(not self.penalty_given)
-        if self.cost_penalty is not None:
-            r_mod = r_mod - (self.cost_counter>self.threshold)*info["cost"]*self.cost_penalty
+        r_mod = r_mod - (self.cost_counter>self.threshold)*info["cost"]*self.cost_penalty
         self.penalty_given = self.cost_counter>self.threshold
         if self.buckets is None:
             self.obs_old = np.concatenate([obs, [min(self.cost_counter,self.threshold+1)]])

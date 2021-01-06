@@ -600,7 +600,12 @@ def experiment_10(): # 5 days
 
 
 def experiment_11(): # 5 days
-    # full training on pointgoal1
+    os.mkdir("results/report/experiment_11/")
+    name = "sac_c_ss10k_m001_a1_c001_10M"
+    sys.stdout = open("results/report/experiment_11/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=400, start_steps=10000, filename="report/experiment_11/" + name, entropy_constraint=-1,
+            cost_penalty=0.01)
     return None
 
 if __name__ == "__main__":
@@ -634,3 +639,6 @@ if __name__ == "__main__":
         experiment_9()
     if args.id == 10:
         experiment_10()
+    if args.id == 11:
+        experiment_11()
+

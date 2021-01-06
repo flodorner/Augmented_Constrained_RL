@@ -282,48 +282,48 @@ def experiment_51():
     sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
-            cost_penalty=0.01,data_aug=True)
+            cost_penalty=0.01,data_aug=True,buckets=26)
 
     name = "sac_c_ss10k_m001_a1_c01_long_data_aug"
     sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
-            cost_penalty=0.1,data_aug=True)
+            cost_penalty=0.1,data_aug=True,buckets=26)
 
     name = "td3_ss10k_m001_a1_c001_long_data_aug"
     sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
     run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_51/" + name,
-            cost_penalty=0.01,data_aug=True)
+            cost_penalty=0.01,data_aug=True,buckets=26)
 
     name = "td3_ss10k_m001_a1_c01_long_data_aug"
     sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
     run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_51/" + name,
-            cost_penalty=0.1,data_aug=True)
+            cost_penalty=0.1,data_aug=True,buckets=26)
 
     return None
 
 def experiment_52():
-    os.mkdir("results/report/experiment_51/")
+    os.mkdir("results/report/experiment_52/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug"
-    sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
+    sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=20, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
-            cost_penalty=0.01, data_aug=True)
+            epochs=20, start_steps=10000, filename="report/experiment_52/" + name, entropy_constraint=-1,
+            cost_penalty=0.01, data_aug=True,buckets=26)
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug_bigbatch"
-    sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
+    sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=20, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
-            cost_penalty=0.01,batch_size=500)
+            epochs=20, start_steps=10000, filename="report/experiment_52/" + name, entropy_constraint=-1,
+            cost_penalty=0.01,batch_size=500,buckets=26)
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_bigbatch"
-    sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
+    sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=20, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
-            cost_penalty=0.01, data_aug=True,batch_size=500)
+            epochs=20, start_steps=10000, filename="report/experiment_52/" + name, entropy_constraint=-1,
+            cost_penalty=0.01, data_aug=True,batch_size=500,buckets=26)
 
 
     return None

@@ -802,6 +802,12 @@ if __name__ == "__main__":
         experiment_51()
     if args.id == 52:
         experiment_52()
+    if args.id == 57:
+        experiment_57()
+    if args.id == 58:
+        experiment_58()
+    if args.id == 59:
+        experiment_59()
     if args.id == 6:
         experiment_6()
     if args.id == 7:

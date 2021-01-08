@@ -786,9 +786,9 @@ def experiment_9():  #1-2 days
 def experiment_10():
     os.mkdir("results/report/experiment_10/")
     name = "sac_c_ss10k_m001_a1_c01_long_data_aug"
-    sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
+    sys.stdout = open("results/report/experiment_10/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=400, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
+            epochs=400, start_steps=10000, filename="report/experiment_10/" + name, entropy_constraint=-1,
             cost_penalty=0.1,data_aug=True,buckets=26)
 
     return None

@@ -546,6 +546,27 @@ def experiment_6():
     
     return None
 
+def experiment_61():
+    os.mkdir("results/report/experiment_61/")
+
+    name = "sac_c_ss10k_m1_a10_long"
+    sys.stdout = open("results/report/experiment_61/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=20,start_steps=10000,filename="report/experiment_61/"+ name ,entropy_constraint=-1)
+
+    name = "sac_c_ss10k_m1_a10_buckets_long"
+    sys.stdout = open("results/report/experiment_61/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=20,start_steps=10000,filename="report/experiment_61/"+ name ,entropy_constraint=-1,buckets=26)
+
+    name = "sac_c_ss10k_m1_a10_buckets_data_aug_long"
+    sys.stdout = open("results/report/experiment_61/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=10,mult_penalty=1,
+            epochs=20,start_steps=10000,filename="report/experiment_61/"+ name ,entropy_constraint=-1,buckets=26,data_aug=True)
+
+    return None
+
+
 def experiment_7(): #1-2 days
     os.mkdir("results/report/experiment_7/")
 
@@ -762,13 +783,14 @@ def experiment_9():  #1-2 days
     return None
 
 
-def experiment_10(): # 5 days
+def experiment_10():
+    os.mkdir("results/report/experiment_10/")
+    name = "sac_c_ss10k_m001_a1_c01_long_data_aug"
+    sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=400, start_steps=10000, filename="report/experiment_51/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,data_aug=True,buckets=26)
 
-
-
-
-
-    # Validate data augmentation on other environments!
     return None
 
 
@@ -810,6 +832,8 @@ if __name__ == "__main__":
         experiment_59()
     if args.id == 6:
         experiment_6()
+    if args.id == 61:
+        experiment_61()
     if args.id == 7:
         experiment_7()
     if args.id == 8:

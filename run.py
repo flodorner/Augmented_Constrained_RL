@@ -793,7 +793,6 @@ def experiment_10():
 
     return None
 
-
 def experiment_11(): # 5 days
     os.mkdir("results/report/experiment_11/")
     name = "sac_c_ss10k_m001_a1_c001_10M"
@@ -802,6 +801,18 @@ def experiment_11(): # 5 days
             epochs=400, start_steps=10000, filename="report/experiment_11/" + name, entropy_constraint=-1,
             cost_penalty=0.01)
     return None
+
+def experiment_12(): # 5 days
+    os.mkdir("results/report/experiment_12/")
+    name = "sac_c_ss10k_m001_a1_c01_10M"
+    sys.stdout = open("results/report/experiment_12/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=400, start_steps=10000, filename="report/experiment_12/" + name, entropy_constraint=-1,
+            cost_penalty=0.1)
+    return None
+
+
+
 
 if __name__ == "__main__":
     import argparse
@@ -844,4 +855,10 @@ if __name__ == "__main__":
         experiment_10()
     if args.id == 11:
         experiment_11()
+    if args.id == 12:
+        experiment_12()
+    if args.id == 13:
+        experiment_13()
+    if args.id == 14:
+        experiment_14()
 

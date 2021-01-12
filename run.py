@@ -821,8 +821,50 @@ def experiment_13():
 
     return None
 
+def experiment_14():
+    os.mkdir("results/report/experiment_14/")
+    name = "sac_c_ss10k_m001_a1_c001_long"
+    sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=0.01)
 
+    name = "sac_c_ss10k_m001_a1_c01_long"
+    sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=0.1)
 
+    name = "sac_c_ss10k_m001_a1_c1_long"
+    sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=1)
+
+    name = "sac_c_ss10k_long"
+    sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
+            epochs=20, start_steps=10000, filename="report/experiment_14/" + name, buckets=0 ,entropy_constraint=-1)
+
+def experiment_15():
+    os.mkdir("results/report/experiment_15/")
+
+    name = "sac_c_ss10k_m0_long"
+    sys.stdout = open("results/report/experiment_15/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=0,mult_penalty=0,
+            epochs=20,start_steps=10000,filename="report/experiment_15/"+ name ,entropy_constraint=-1)
+
+    name = "sac_c_ss10k_m001_long"
+    sys.stdout = open("results/report/experiment_15/"+ name + "log.txt", 'w')
+    run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=None,add_penalty=0,mult_penalty=0.01,
+            epochs=20,start_steps=10000,filename="report/experiment_15/"+ name ,entropy_constraint=-1)
+
+    name = "sac_c_ss10k_m001_a1_long"
+    sys.stdout = open("results/report/experiment_15/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_15/" + name, entropy_constraint=-1)
+
+    name = "sac_c_ss10k_m001_a10_long"
+    sys.stdout = open("results/report/experiment_15/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=10, mult_penalty=0.01,
+            epochs=20, start_steps=10000, filename="report/experiment_15/" + name, entropy_constraint=-1)
 
 if __name__ == "__main__":
     import argparse
@@ -869,5 +911,9 @@ if __name__ == "__main__":
         experiment_12()
     if args.id == 13:
         experiment_13()
+    if args.id == 14:
+        experiment_14()
+    if args.id == 15:
+        experiment_15()
 
 

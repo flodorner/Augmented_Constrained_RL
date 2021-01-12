@@ -1,0 +1,43 @@
+{
+    "ac_kwargs":	{
+        "hidden_sizes":	[
+            256,
+            256
+        ]
+    },
+    "actor_critic":	"MLPActorCritic",
+    "clip_ratio":	0.2,
+    "env_fn":	"<function run_exp.<locals>.<lambda> at 0x2b22b19d9950>",
+    "epochs":	10,
+    "exp_name":	"report/experiment_8/ppo_m001_a1_c001_pointpushpolicy",
+    "gamma":	0.99,
+    "lam":	0.97,
+    "logger":	{
+        "<spinup.utils.logx.EpochLogger object at 0x2b2295693358>":	{
+            "epoch_dict":	{},
+            "exp_name":	"report/experiment_8/ppo_m001_a1_c001_pointpushpolicy",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"results/report/experiment_8/ppo_m001_a1_c001_pointpushpolicy",
+            "output_file":	{
+                "<_io.TextIOWrapper name='results/report/experiment_8/ppo_m001_a1_c001_pointpushpolicy/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"report/experiment_8/ppo_m001_a1_c001_pointpushpolicy",
+        "output_dir":	"results/report/experiment_8/ppo_m001_a1_c001_pointpushpolicy"
+    },
+    "max_ep_len":	1000,
+    "pi_lr":	0.0003,
+    "save_freq":	10,
+    "seed":	0,
+    "steps_per_epoch":	25001,
+    "target_kl":	0.01,
+    "train_pi_iters":	80,
+    "train_v_iters":	80,
+    "vf_lr":	0.001
+}

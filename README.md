@@ -10,7 +10,7 @@ Requires **Python 3.6.x**
 
 ## Installation
 
-This code depends on [mujoco_py](https://github.com/openai/mujoco-py), [safety_gym](https://github.com/openai/safety-gym) and [spinningup](https://github.com/openai/spinningup). This sections runs you through a quick installation of the required python packages.
+This code depends on [mujoco-py](https://github.com/openai/mujoco-py), [safety-gym](https://github.com/openai/safety-gym) and [spinningup](https://github.com/openai/spinningup) by OpenAI. This sections runs you through a quick installation of the required python packages.
 
 #### Installing MuJoCo
 
@@ -45,8 +45,56 @@ cd safety-gym
 pip install -e .
 ```
 
+#### Installing SpinningUp
+
+[SpinningUp](https://spinningup.openai.com/en/latest/) contains a code repo of the implementation of key Reinforcement Learning algorithms including Soft Actor-Critic, Proximal Policy Optimization and Twin Delayed DDPG used in this project.
+
+We use a [forked repository](https://github.com/flodorner/spinningup) of the original SpinninpUp where we implement changes required for State Augmented Constrained RL. 
+
+1. First install OpenMPI:
+```
+sudo apt-get update && sudo apt-get install libopenmpi-dev
+```
+2. Now install the forked spinningup:
+```
+git clone https://github.com/flodorner/spinningup.git
+cd spinningup
+pip install -e .
+```
+
+## Code Structure
 
 
+## Running Experiments
 
-Use the following fork for spinup:
-https://github.com/flodorner/spinningup
+The experiments can simply be run by:
+```
+python run.py --id {exp_id}
+```
+where _{exp_id}_ is the id of the experiment you wish to run.
+
+
+You can also run your custom experiments by passing runtime arguments to _test_constraints.py_. For example, start an experiment with Soft Actor-Critic by running:
+```
+python test_constraints.py --alg 'sac'
+```
+The following arguments are available:
+```
+alg: determines wheter sac, ppo or td3 is used.
+alpha: is the exploration parameter in sac. 
+add_penalty: add_penalty is Beta from the proposal.
+mult_penalty: If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
+cost_penalty: cost_penalty is equal to zeta from the proposal.
+buckets: buckets determines how the accumulated cost is discretized for the agent:
+    -if it is None, cost is a continouos variable, else there are buckets indicator variables for a partition of \[0,constraint]\, (with the last only activating if the constraint is violated). epochs: Epochs indicates how many epochs to train for
+start_step: start_steps indicates how many random exploratory actions to perform before using the trained policy. 
+split_policy: Split_policy changes the network architecture such that a second network is used for the policy and q-values when the constraint is violated. 
+safe_policy: safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint is violated. 
+name: name determines where in the results folder the res29541.pts-3.tensorflow-1-vmults and trained policy get saved to.
+env_name: env_name indicates the name of the enviroment the agent trains on. Can be chosen from one of the safety-gym environments.
+```
+
+## Results
+
+The results of all the experiments listed in run.py can be found at this [polybox link](https://polybox.ethz.ch/index.php/s/ElsdfFGYtBiVq3L).
+

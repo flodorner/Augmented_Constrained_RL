@@ -12,7 +12,7 @@ Requires **Python 3.6.x**
 
 This code depends on [mujoco-py](https://github.com/openai/mujoco-py), [safety-gym](https://github.com/openai/safety-gym) and [spinningup](https://github.com/openai/spinningup) by OpenAI. This sections runs you through a quick installation of the required python packages.
 
-#### Installing MuJoCo
+### Installing MuJoCo
 
 MuJoCo is a physics engine for detailed, efficient rigid body simulations with contacts. mujoco-py allows using MuJoCo from Python 3. Further details about mujoco-py can be found [here](https://github.com/openai/mujoco-py).
 
@@ -28,7 +28,7 @@ sudo apt install libosmesa6-dev libgl1-mesa-glx libglfw3
 pip install -U 'mujoco-py<2.1,>=2.0'
 ```
 
-#### Installing Safety Gym
+### Installing Safety Gym
 
 Safety Gym is a suite of environments and tools for measuring progress towards reinforcement learning agents that respect safety constraints while training. More information can be found [here](https://openai.com/blog/safety-gym/)
 
@@ -45,7 +45,7 @@ cd safety-gym
 pip install -e .
 ```
 
-#### Installing SpinningUp
+### Installing SpinningUp
 
 [SpinningUp](https://spinningup.openai.com/en/latest/) contains a code repo of the implementation of key Reinforcement Learning algorithms including Soft Actor-Critic, Proximal Policy Optimization and Twin Delayed DDPG used in this project.
 
@@ -75,12 +75,15 @@ pip install -e .
 
 ## Running Experiments
 
+### Predefined Experiments
+
 The experiments can simply be run by:
 ```
 python run.py --id {exp_id}
 ```
 where _{exp_id}_ is the id of the experiment you wish to run.
 
+### Custom Experiments
 
 You can also run your custom experiments by passing runtime arguments to _test_constraints.py_. For example, start an experiment with Soft Actor-Critic by running:
 ```

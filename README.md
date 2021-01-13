@@ -90,20 +90,20 @@ You can also run your custom experiments by passing runtime arguments to _test_c
 python test_constraints.py --alg 'sac'
 ```
 The following arguments are available:
-```
-alg: alg determines wheter sac, ppo or td3 is used.
-alpha: alpha is the exploration parameter in sac. 
-add_penalty: add_penalty is Beta from the proposal.
-mult_penalty: If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
-cost_penalty: cost_penalty is equal to zeta from the proposal.
-buckets: buckets determines how the accumulated cost is discretized for the agent.
-epochs: Epochs indicates how many epochs to train for
-start_step: start_steps indicates how many random exploratory actions to perform before using the trained policy. 
-split_policy: split_policy changes the network architecture such that a second network is used for the policy and q-values when the constraint is violated. 
-safe_policy: safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint is violated. 
-name: name determines where in the results folder the res29541.pts-3.tensorflow-1-vmults and trained policy get saved to.
-env_name: env_name indicates the name of the enviroment the agent trains on. Can be chosen from one of the safety-gym environments.
-```
+
+-alg: alg determines wheter sac, ppo or td3 is used.
+-alpha: alpha is the exploration parameter in sac. 
+-add_penalty: add_penalty is Beta from the proposal.
+-mult_penalty: If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
+-cost_penalty: cost_penalty is equal to zeta from the proposal.
+-buckets: buckets determines how the accumulated cost is discretized for the agent.
+-epochs: Epochs indicates how many epochs to train for
+-start_step: start_steps indicates how many random exploratory actions to perform before using the trained policy. 
+-split_policy: split_policy changes the network architecture such that a second network is used for the policy and q-values when the constraint is violated. 
+-safe_policy: safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint is violated. 
+-name: name determines where in the results folder the res29541.pts-3.tensorflow-1-vmults and trained policy get saved to.
+-env_name: env_name indicates the name of the enviroment the agent trains on. Can be chosen from one of the safety-gym environments.
+
 
 ## Results
 

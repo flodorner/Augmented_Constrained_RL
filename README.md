@@ -65,8 +65,11 @@ pip install -e .
 ## Code Structure
 
 **wrapper.py:** Defines the ```constraint_wrapper``` class which serves as a wrapper around the safety-gym ```env``` class. The ```step``` method of the ```constraint_wrapper``` class returns a cost-augmented state observations and a cost-modified reward.
+
 **test_constraints.py:** Creates an instance of the ```constraint_wrapper``` class and starts an experiment with given arguments.
+
 **test_noconstraints.py:** Creates an instance of the safety-gym ```env``` class and starts training an unconstrained agent with default arguments.
+
 **run.py:** Run an experiment from the set of experiments listed in the proposal.
 
 
@@ -90,7 +93,8 @@ alpha: alpha is the exploration parameter in sac.
 add_penalty: add_penalty is Beta from the proposal.
 mult_penalty: If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
 cost_penalty: cost_penalty is equal to zeta from the proposal.
-buckets: buckets determines how the accumulated cost is discretized for the agent. If it is None, cost is a continouos variable, else there are buckets indicator variables for a partition of \[0,constraint]\, (with the last only activating if the constraint is violated). epochs: Epochs indicates how many epochs to train for
+buckets: buckets determines how the accumulated cost is discretized for the agent.
+epochs: Epochs indicates how many epochs to train for
 start_step: start_steps indicates how many random exploratory actions to perform before using the trained policy. 
 split_policy: split_policy changes the network architecture such that a second network is used for the policy and q-values when the constraint is violated. 
 safe_policy: safe_policy indicates the saving location for a trained safe policy. If provided, the safe policy will take over whenever the constraint is violated. 

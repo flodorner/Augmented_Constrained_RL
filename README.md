@@ -108,4 +108,5 @@ The following arguments are available:
 ## Results
 
 The results of all the experiments listed in run.py can be found at this [polybox link](https://polybox.ethz.ch/index.php/s/ElsdfFGYtBiVq3L).
+Per-episode rewards and costs are stored in pickle files ({experiment_name} _ rews.pkl and {experiment_name} _ costs.pkl) in order. If the training loop uses test epsiodes, these need to be excluded for the analysis, as done in Plot_results.Ipynb for our experiments. 
 

@@ -10,7 +10,7 @@ Requires **Python 3.6.x**
 
 ## Installation
 
-Apart from standard libraries installable via pip (torch,gym,matplotlib,numpy,pickle,datetime,sys,os) our code depends on [mujoco-py](https://github.com/openai/mujoco-py), [safety-gym](https://github.com/openai/safety-gym) and [spinningup](https://github.com/openai/spinningup) by OpenAI. This sections runs you through a quick installation of the required python packages.
+Apart from standard libraries installable via pip (torch,matplotlib,numpy,pickle,datetime,sys,os) our code depends on [mujoco-py](https://github.com/openai/mujoco-py), [safety-gym](https://github.com/openai/safety-gym) and [spinningup](https://github.com/openai/spinningup) by OpenAI. This sections runs you through a quick installation of the required python packages.
 
 ### Installing MuJoCo
 

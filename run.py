@@ -883,6 +883,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--id', type=int, default=1)
     args = parser.parse_args()
+    if not os.dir.exists("results"): os.mkdir("results")
+    if not os.dir.exists("results/report"): os.mkdir("results/report")
     if args.id == 1:
         experiment_1()
     if args.id == 101:

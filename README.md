@@ -49,7 +49,7 @@ pip install -e .
 
 [SpinningUp](https://spinningup.openai.com/en/latest/) contains a code repo of the implementation of key Reinforcement Learning algorithms including Soft Actor-Critic, Proximal Policy Optimization and Twin Delayed DDPG used in this project.
 
-We use a [forked repository](https://github.com/flodorner/spinningup) of the original SpinninpUp where we implement changes required for State Augmented Constrained RL. 
+We use a [forked repository](https://github.com/flodorner/spinningup) of the original SpinninpUp where we implement changes required for State Augmented Constrained RL, as well as the more robust [adaptive entropy penalty](https://arxiv.org/abs/1812.05905) for SAC.
 
 1. First install OpenMPI:
 ```

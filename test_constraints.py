@@ -1,4 +1,3 @@
-https://github.com/flodorner/Augmented_Constrained_RL.gitimport safety_gym
 import gym
 from spinup import sac_pytorch,td3_pytorch,ppo_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
 import sys

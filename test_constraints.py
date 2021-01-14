@@ -1,4 +1,4 @@
-import safety_gym
+https://github.com/flodorner/Augmented_Constrained_RL.gitimport safety_gym
 import gym
 from spinup import sac_pytorch,td3_pytorch,ppo_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
 import sys
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     filename =  datetime.now().strftime("%m_%d_%Y__%H_%M_%S")  + args.name + "/"
-    if not os.dir.exists("results"): os.mkdir("results")
+    if not os.path.exists("results"): os.mkdir("results")
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)

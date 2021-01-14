@@ -103,6 +103,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     filename =  datetime.now().strftime("%m_%d_%Y__%H_%M_%S")  + args.name + "/"
+    if not os.dir.exists("results"): os.mkdir("results")
     os.mkdir("results/"+filename)
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)

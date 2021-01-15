@@ -83,7 +83,7 @@ python run.py --id {exp_id}
 ```
 where _{exp_id}_ is the id of the experiment you wish to run.
 
-To reproduce the results in the main report, only experiments 3,4,5,6,10,11,12,14,15 and 51 need to be run.
+To reproduce the results in the main report, only experiments 3,4,5,6,10,11,12,14,15 and 51 need to be run. We kept the experiments in the same combination as they were run intially to avoid introducing mistakes, but calls to run_exp that use a name not mentioned in the first five plots in Plot_results.ipynb should be safely omittable to make things faster if only the plots from the main report are replicated. 
 
 ### Custom Experiments
 

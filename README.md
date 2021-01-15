@@ -112,5 +112,5 @@ Per-episode rewards and costs are stored in pickle files ({experiment_name} _ re
 
 ## Known Issues
 
-- The code gives a segmentation error on an old 2GB Nvidia GPU. Should work fine with newer GPUs with more memory. Alternatively, using the CPU instead can be forced by replacing "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')" with "device = torch.device('cpu')" in https://github.com/flodorner/spinningup/blob/master/spinup/algos/pytorch/sac/sac.py (line 221) and https://github.com/flodorner/spinningup/blob/master/spinup/algos/pytorch/td3/td3.py (line 217) and reinstalling spinup. 
+- The code gives a segmentation error on an old 2GB Nvidia GPU. Should work fine with newer GPUs with more memory. Using the CPU can be forced by replacing "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')" with "device = torch.device('cpu')" in https://github.com/flodorner/spinningup/blob/master/spinup/algos/pytorch/sac/sac.py (line 221) and https://github.com/flodorner/spinningup/blob/master/spinup/algos/pytorch/td3/td3.py (line 217) and reinstalling spinup. 
 

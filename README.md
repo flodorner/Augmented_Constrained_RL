@@ -83,6 +83,8 @@ python run.py --id {exp_id}
 ```
 where _{exp_id}_ is the id of the experiment you wish to run.
 
+To reproduce the results in the main report, only experiments 3,4,5,6,10,11,12,14,15 and 51 need to be run.
+
 ### Custom Experiments
 
 You can also run your custom experiments by passing runtime arguments to _test_constraints.py_. For example, start an experiment with Soft Actor-Critic by running:

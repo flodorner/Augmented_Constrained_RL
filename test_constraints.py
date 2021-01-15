@@ -17,7 +17,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
             safe_policy=False,entropy_constraint=-1,collector_policy=None,filename="",steps_per_epoch=10001,
             num_test_episodes=10,act_noise=0.1,data_aug=False,env_name='Safexp-PointGoal1-v0',batch_size=100):
 
-    # alg determines wheter sac or td3 is used.
+    # alg determines whether sac, ppo or td3 is used.
     #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal.
     # If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
     # cost_penalty is equal to zeta from the proposal. buckets determines how the accumulated cost is discretized for the agent:

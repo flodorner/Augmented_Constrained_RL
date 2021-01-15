@@ -7,19 +7,19 @@ def experiment_1(): #1 day
     name = "sac_a02_ss10k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.2,add_penalty=0,
-            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0, entropy_constraint=None)
     name = "sac_a02_ss100k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.2,add_penalty=0,
-            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0, entropy_constraint=None)
     name = "sac_a0002_ss10k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.002,add_penalty=0,
-            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=10000,filename="report/experiment_1/"+ name ,buckets=0, entropy_constraint=None)
     name = "sac_a0002_ss100k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.002,add_penalty=0,
-            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0)
+            epochs=10,start_steps=100000,filename="report/experiment_1/"+ name ,buckets=0, entropy_constraint=None)
     name = "td3_an01_ss10k"
     sys.stdout = open("results/report/experiment_1/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, add_penalty=0,
@@ -332,13 +332,6 @@ def experiment_52():
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_52/" + name, entropy_constraint=-1,
             cost_penalty=0.01, data_aug=True,buckets=26)
-
-    name = "sac_c_ss10k_m001_a1_c001_long_data_aug_bigbatch" #Names are reversed for this and the next experiment.
-    # We kept it like this and flagged it in our plotting notebook to avoid additional confusion due to renaming.
-    sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
-            epochs=20, start_steps=10000, filename="report/experiment_52/" + name, entropy_constraint=-1,
-            cost_penalty=0.01,batch_size=500,buckets=26)
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_bigbatch"
     sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
@@ -823,22 +816,22 @@ def experiment_13():
 
 def experiment_14():
     os.mkdir("results/report/experiment_14/")
-    name = "sac_c_ss10k_m001_a1_c001_long"
+    name = "sac_c_ss10k_m001_a1_c001_long2"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=0.01)
 
-    name = "sac_c_ss10k_m001_a1_c01_long"
+    name = "sac_c_ss10k_m001_a1_c01_long2"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=0.1)
 
-    name = "sac_c_ss10k_m001_a1_c1_long"
+    name = "sac_c_ss10k_m001_a1_c1_long2"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=1)
 
-    name = "sac_c_ss10k_long"
+    name = "sac_c_ss10k_long2"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, buckets=0 ,entropy_constraint=-1)
@@ -876,6 +869,15 @@ def experiment_16():
             epochs=100, start_steps=10000, filename="report/experiment_16/" + name, entropy_constraint=-1,
             cost_penalty=0.0,data_aug=True,buckets=26)
 
+    return None
+
+def experiment_17():
+    os.mkdir("results/report/experiment_17/")
+    name = "sac_c_ss10k_m001_a1_c01_data_aug_bigbatch_2_5M"
+    sys.stdout = open("results/report/experiment_17/" + name + "log.txt", 'w')
+    run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
+            epochs=100, start_steps=10000, filename="report/experiment_17/" + name, entropy_constraint=-1,
+            cost_penalty=0.1,batch_size=500,buckets=26,data_aug=True)
     return None
 
 if __name__ == "__main__":
@@ -931,6 +933,8 @@ if __name__ == "__main__":
         experiment_15()
     if args.id == 16:
         experiment_16()
+    if args.id == 17:
+        experiment_17()
 
 
 

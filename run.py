@@ -2,9 +2,13 @@ import os
 import sys
 from test_constraints import run_exp
 
+def checked_mkdir(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
 def experiment_1():
     #Test different hyperparameters for SAC and TD3 on the unconstrained PointGoal1 task
-    os.mkdir("results/report/experiment_1/")
+    checked_mkdir("results/report/experiment_1/")
     name = "sac_a02_ss10k"
     sys.stdout = open("results/report/experiment_1/"+ name + "log.txt", 'w')
     run_exp(alg="sac",steps_per_epoch=25001,num_test_episodes=25,alpha=0.2,add_penalty=0,
@@ -50,7 +54,7 @@ def experiment_1():
 
 def experiment_101():
     #Evaluate peformance of SAC on other unconstrained tasks from SafetyGym
-    os.mkdir("results/report/experiment_101/")
+    checked_mkdir("results/report/experiment_101/")
     name = "sac_c_ss10k_pointpush"
     sys.stdout = open("results/report/experiment_101/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
@@ -73,7 +77,7 @@ def experiment_101():
 
 def experiment_2():
     #Test different values for the multiplicative and one-time penalty for SAC, TD3 and PPO on PointGoal1
-    os.mkdir("results/report/experiment_2/")
+    checked_mkdir("results/report/experiment_2/")
 
     name = "sac_c_ss10k_m0"
     sys.stdout = open("results/report/experiment_2/"+ name + "log.txt", 'w')
@@ -140,7 +144,7 @@ def experiment_2():
 
 def experiment_3():
     # Test different values for the cost penalty for SAC, TD3 and PPO on PointGoal1
-    os.mkdir("results/report/experiment_3/")
+    checked_mkdir("results/report/experiment_3/")
 
     name = "sac_c_ss10k_m001_a1_c001"
     sys.stdout = open("results/report/experiment_3/" + name + "log.txt", 'w')
@@ -206,7 +210,7 @@ def experiment_3():
 
 def experiment_4():
     # Test different network architectures for SAC, TD3 and PPO on PointGoal1
-    os.mkdir("results/report/experiment_4/")
+    checked_mkdir("results/report/experiment_4/")
 
     name = "ppo_m001_a1_c001_buckets_splitnet"
     sys.stdout = open("results/report/experiment_4/" + name + "log.txt", 'w')
@@ -256,7 +260,7 @@ def experiment_4():
 
 def experiment_5():
     #test data augmentation on most promising parameters for continuous and bucket-representation of the cost on PointGoal1
-    os.mkdir("results/report/experiment_5/")
+    checked_mkdir("results/report/experiment_5/")
 
     name = "sac_c_ss10k_m001_a1_c001_data_aug"
     sys.stdout = open("results/report/experiment_5/" + name + "log.txt", 'w')
@@ -301,7 +305,7 @@ def experiment_5():
 
 def experiment_51():
     #Run the best performing configurations from experiment_5 for twice as long
-    os.mkdir("results/report/experiment_51/")
+    checked_mkdir("results/report/experiment_51/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug"
     sys.stdout = open("results/report/experiment_51/" + name + "log.txt", 'w')
@@ -331,7 +335,7 @@ def experiment_51():
 
 def experiment_52():
     #Test the effect of adjusting the batch size for a promising SAC configuration, both with and without data augmentation (PointGoal1)
-    os.mkdir("results/report/experiment_52/")
+    checked_mkdir("results/report/experiment_52/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug"
     sys.stdout = open("results/report/experiment_52/" + name + "log.txt", 'w')
@@ -373,7 +377,7 @@ def experiment_52():
 
 def experiment_57():
     #Rerun experiment 5 for the CarGoal1 task
-    os.mkdir("results/report/experiment_57/")
+    checked_mkdir("results/report/experiment_57/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug_cargoal"
     sys.stdout = open("results/report/experiment_57/" + name + "log.txt", 'w')
@@ -415,7 +419,7 @@ def experiment_57():
 
 def experiment_58():
     # Rerun experiment 5 for the PointPush1 task
-    os.mkdir("results/report/experiment_58/")
+    checked_mkdir("results/report/experiment_58/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug_pointpush"
     sys.stdout = open("results/report/experiment_58/" + name + "log.txt", 'w')
@@ -458,7 +462,7 @@ def experiment_58():
 
 def experiment_59():
     # Rerun experiment 5 for the PointGoal2 task
-    os.mkdir("results/report/experiment_59/")
+    checked_mkdir("results/report/experiment_59/")
 
     name = "sac_c_ss10k_m001_a1_c001_long_data_aug_pointgoal2"
     sys.stdout = open("results/report/experiment_59/" + name + "log.txt", 'w')
@@ -502,7 +506,7 @@ def experiment_59():
 def experiment_6():
     #Test SAC without a multiplicative penalty and larger additive penalties (Geibel's approach) on PointGoal1.
     #Also run experiments for varying values of the additive and multiplicative penalty for a longer time.
-    os.mkdir("results/report/experiment_6/")
+    checked_mkdir("results/report/experiment_6/")
 
     name = "sac_c_ss10k_m1_a2"
     sys.stdout = open("results/report/experiment_6/"+ name + "log.txt", 'w')
@@ -544,12 +548,12 @@ def experiment_6():
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_6/" + name, entropy_constraint=-1,
             cost_penalty=0.1)
-    
+
     return None
 
 def experiment_61():
     #Test the effect of data augmentation and buckets on Geibel's approach
-    os.mkdir("results/report/experiment_61/")
+    checked_mkdir("results/report/experiment_61/")
 
     name = "sac_c_ss10k_m1_a10_long"
     sys.stdout = open("results/report/experiment_61/"+ name + "log.txt", 'w')
@@ -571,7 +575,7 @@ def experiment_61():
 
 def experiment_7():
     #Repeat various previous experiments on CarGoal1
-    os.mkdir("results/report/experiment_7/")
+    checked_mkdir("results/report/experiment_7/")
 
     name = "sac_c_ss10k_m001_a1_c001_cargoal"
     sys.stdout = open("results/report/experiment_7/" + name + "log.txt", 'w')
@@ -643,7 +647,7 @@ def experiment_7():
 
 def experiment_8():
     # Repeat various previous experiments on PointPush1
-    os.mkdir("results/report/experiment_8/")
+    checked_mkdir("results/report/experiment_8/")
 
     name = "sac_c_ss10k_m001_a1_c001_pointpush"
     sys.stdout = open("results/report/experiment_8/" + name + "log.txt", 'w')
@@ -714,8 +718,8 @@ def experiment_8():
 
 def experiment_9():
     # Repeat various previous experiments on PointGoal2
-    os.mkdir("results/report/experiment_9/")
-    
+    checked_mkdir("results/report/experiment_9/")
+
     name = "sac_c_ss10k_m001_a1_c001_pointgoal2"
     sys.stdout = open("results/report/experiment_9/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -788,7 +792,7 @@ def experiment_9():
 
 def experiment_10():
     #Run SAC on PointGoal1 with zeta=0.1 and data augmentation for 5M environment steps
-    os.mkdir("results/report/experiment_10/")
+    checked_mkdir("results/report/experiment_10/")
     name = "sac_c_ss10k_m001_a1_c01_data_aug_5M"
     sys.stdout = open("results/report/experiment_10/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -799,7 +803,7 @@ def experiment_10():
 
 def experiment_11():
     # Run SAC on PointGoal1 with zeta=0.01 for 10M environment steps
-    os.mkdir("results/report/experiment_11/")
+    checked_mkdir("results/report/experiment_11/")
     name = "sac_c_ss10k_m001_a1_c001_10M"
     sys.stdout = open("results/report/experiment_11/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -809,7 +813,7 @@ def experiment_11():
 
 def experiment_12(): #
     # Run SAC on PointGoal1 with zeta=0.1 for 10M environment steps
-    os.mkdir("results/report/experiment_12/")
+    checked_mkdir("results/report/experiment_12/")
     name = "sac_c_ss10k_m001_a1_c01_10M"
     sys.stdout = open("results/report/experiment_12/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -819,7 +823,7 @@ def experiment_12(): #
 
 def experiment_13():
     # Run TD3 on PointGoal1 with zeta=0.1 and data augmentation for 5M environment steps
-    os.mkdir("results/report/experiment_13/")
+    checked_mkdir("results/report/experiment_13/")
     name = "td3_ss10k_m001_a1_c01_data_aug_5M"
     sys.stdout = open("results/report/experiment_13/" + name + "log.txt", 'w')
     run_exp(alg="td3", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -830,7 +834,7 @@ def experiment_13():
 
 def experiment_14():
     #Run SAC with different values of zeta (and an unconstrained version) for longer for the final plots
-    os.mkdir("results/report/experiment_14/")
+    checked_mkdir("results/report/experiment_14/")
     name = "sac_c_ss10k_m001_a1_c001_long2"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -853,7 +857,7 @@ def experiment_14():
     return None
 def experiment_15():
     #Run SAC with different values of the multiplicative and additive penalty for longer for the final plots
-    os.mkdir("results/report/experiment_15/")
+    checked_mkdir("results/report/experiment_15/")
 
     name = "sac_c_ss10k_m0_long"
     sys.stdout = open("results/report/experiment_15/"+ name + "log.txt", 'w')
@@ -879,7 +883,7 @@ def experiment_15():
 
 def experiment_16():
     # Run SAC on PointGoal1 with zeta=0, alpha=10 for 2.5M environment steps
-    os.mkdir("results/report/experiment_16/")
+    checked_mkdir("results/report/experiment_16/")
     name = "sac_c_ss10k_m001_a10_data_aug_2_5M"
     sys.stdout = open("results/report/experiment_16/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=10, mult_penalty=0.01,
@@ -890,7 +894,7 @@ def experiment_16():
 
 def experiment_17():
     # Run SAC on PointGoal1 with zeta=0.1 for 2.5M environment steps using data augmentation and larger batches
-    os.mkdir("results/report/experiment_17/")
+    checked_mkdir("results/report/experiment_17/")
     name = "sac_c_ss10k_m001_a1_c01_data_aug_bigbatch_2_5M"
     sys.stdout = open("results/report/experiment_17/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
@@ -903,8 +907,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--id', type=int, default=1)
     args = parser.parse_args()
-    if not os.path.exists("results"): os.mkdir("results")
-    if not os.path.exists("results/report"): os.mkdir("results/report")
+    if not os.path.exists("results"): checked_mkdir("results")
+    if not os.path.exists("results/report"): checked_mkdir("results/report")
     if args.id == 1:
         experiment_1()
     if args.id == 101:
@@ -953,6 +957,3 @@ if __name__ == "__main__":
         experiment_16()
     if args.id == 17:
         experiment_17()
-
-
-

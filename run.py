@@ -846,7 +846,7 @@ def experiment_14():
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=1, mult_penalty=0.01,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, entropy_constraint=-1,cost_penalty=1)
 
-    name = "sac_c_ss10k_long2"
+    name = "sac_c_ss10k_long"
     sys.stdout = open("results/report/experiment_14/" + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=25001, num_test_episodes=25, alpha=None, add_penalty=0,
             epochs=20, start_steps=10000, filename="report/experiment_14/" + name, buckets=0 ,entropy_constraint=-1)

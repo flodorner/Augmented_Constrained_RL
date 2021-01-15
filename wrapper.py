@@ -19,7 +19,7 @@ class constraint_wrapper:
         self.base_env = env 
         self.buckets = buckets # no. of buckets for discretization
         # Adding cost dimension to observation space
-        if self.buckets is None:
+        if self.buckets is None: 
             low = np.concatenate([env.observation_space.low,np.array([0])])
             high = np.concatenate([env.observation_space.high,np.array([np.inf])])
         else:
@@ -27,8 +27,8 @@ class constraint_wrapper:
             high = np.concatenate([env.observation_space.high,np.array([np.inf for i in range(self.buckets)])])
         self.observation_space = Box(low=low,high=high,dtype=np.float32) 
         self.action_space = env.action_space
-        self.total_rews = []
-        self.total_costs = []
+        self.total_rews = [] # To store total episode returns
+        self.total_costs = [] # To store total episode costs
         self.t = -1
         self.add_penalty = add_penalty # add_penalty is Beta from the proposal.
         self.threshold = threshold # threshold value for cost
@@ -42,11 +42,12 @@ class constraint_wrapper:
             self.safe_policy = False
 
     def reset(self):
-        self.penalty_given = False
+        self.penalty_given = False # Reset penalties
         if self.t > 0:
             self.total_rews.append(self.reward_counter)
             self.total_costs.append(self.cost_counter)
         obs = self.base_env.reset()
+        # Reset episode time, cost, and returns
         self.t = 0
         self.cost_counter = 0
         self.reward_counter = 0

@@ -1,6 +1,6 @@
 import safety_gym
 import gym
-from spinup import sac_pytorch,td3_pytorch,ppo_pytorch #sac_tf1 should work with tensorflow 1, if you prefer to use that instead
+from spinup import sac_pytorch,td3_pytorch,ppo_pytorch
 import sys
 from wrapper import constraint_wrapper
 import pickle
@@ -18,7 +18,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
             num_test_episodes=10,act_noise=0.1,data_aug=False,env_name='Safexp-PointGoal1-v0',batch_size=100):
 
     # alg determines whether sac, ppo or td3 is used.
-    #alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal.
+    # alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal.
     # If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated (1-alpha from the proposal)
     # cost_penalty is equal to zeta from the proposal. buckets determines how the accumulated cost is discretized for the agent:
     #if it is None, cost is a continouos variable, else there are buckets indicator variables for a partition of [0,constraint]
@@ -41,17 +41,20 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
     if alpha == 0:
         alpha = None
 
-    env = gym.make(env_name)
+    env = gym.make(env_name) # Create an instance of the safety-gym environment.
+    # Create an instance of the constrained environment.
     env = constraint_wrapper(env,add_penalty=add_penalty,mult_penalty=mult_penalty,
                              cost_penalty=cost_penalty,buckets=buckets,safe_policy=safe_policy)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3" or alg == "ppo"
+    # Select learning method
     if alg == "sac":
         import spinup.algos.pytorch.sac.core as core
         if split_policy:
             actor_critic = core.MLPActorCriticSplit
         else:
             actor_critic = core.MLPActorCritic
+        # Start training with SAC
         sac_pytorch(lambda: env,epochs=epochs,alpha=alpha,steps_per_epoch=steps_per_epoch,start_steps=start_steps,
                     logger_kwargs=logger_kwargs,num_test_episodes=num_test_episodes,actor_critic=actor_critic,ac_kwargs=ac_kwargs,entropy_constraint=entropy_constraint,collector_policy=collector_policy,data_aug=data_aug,batch_size=batch_size)
     elif alg == "td3":
@@ -60,6 +63,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
             actor_critic = core.MLPActorCriticSplit
         else:
             actor_critic = core.MLPActorCritic
+        # Start training with TD3
         td3_pytorch(lambda: env,epochs=epochs,steps_per_epoch=steps_per_epoch,start_steps=start_steps,logger_kwargs=logger_kwargs,
                     actor_critic=actor_critic,act_noise=act_noise,ac_kwargs=ac_kwargs,collector_policy=collector_policy,data_aug=data_aug,num_test_episodes=num_test_episodes,batch_size=batch_size)
     elif alg == "ppo":
@@ -69,11 +73,13 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
             actor_critic = core.MLPActorCriticSplit
         else:
             actor_critic = core.MLPActorCritic
+        # Start training with PPO
         ppo_pytorch(lambda: env, epochs=epochs, steps_per_epoch=steps_per_epoch,
                     logger_kwargs=logger_kwargs,
                     actor_critic=actor_critic, ac_kwargs=ac_kwargs)
 
     #Ideally, you would separate train and test runs more directly here rather than reylying on the alg to work exactly as described...
+    # Store training results in pickle file
     with open("results/"+filename+"rews.pkl", 'wb') as f:
         pickle.dump(env.total_rews, f)
     with open("results/"+filename+"costs.pkl", 'wb') as f:
@@ -83,6 +89,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
 
 if __name__ == "__main__":
     import argparse
+    # Import experiment arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', type=str, default="sac")
     parser.add_argument('--alpha', type=float, default=0)
@@ -104,7 +111,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     filename =  datetime.now().strftime("%m_%d_%Y__%H_%M_%S")  + args.name + "/"
     if not os.path.exists("results"): os.mkdir("results")
-    os.mkdir("results/"+filename)
+    if not os.path.exists("results/"+filename): os.mkdir("results/"+filename)
+    # Save logs to a file
     sys.stdout = open("results/"+filename+"log.txt", 'w')
     print(args)
 
@@ -122,16 +130,17 @@ if __name__ == "__main__":
             ac_kwargs=dict(hidden_sizes=[args.hid] * args.l),safe_policy=safe_policy,
             entropy_constraint=args.entropy_constraint,collector_policy=collector_policy,filename=filename,data_aug=False,
             env_name=args.env_name)
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=True)
+    # Test the trained policy
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # Create an animation of the policy
+    _, get_action = load_policy_and_env("results/" + filename + "policy", deterministic=True) # Load policy parameters
     frames = []
 
+    # Create an animation of the policy
     env = gym.make('Safexp-PointGoal1-v0')
     env = constraint_wrapper(env, add_penalty=args.add_penalty, mult_penalty=args.mult_penalty,
                              cost_penalty=args.cost_penalty, buckets=args.buckets,
                              safe_policy=safe_policy)
-
+    # Test for 5k steps
     for i in range(5):
         o = env.reset()
         for i in range(1000):

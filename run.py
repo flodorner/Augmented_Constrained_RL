@@ -2,6 +2,7 @@ import os
 import sys
 from test_constraints import run_exp
 
+# Check if directory exists before creating
 def checked_mkdir(path):
     if not os.path.exists(path):
         os.mkdir(path)

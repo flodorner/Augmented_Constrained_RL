@@ -4,10 +4,11 @@ import numpy as np
 from spinup.utils.test_policy import load_policy_and_env
 import torch
 
-# Used to represent accumulated cost in the form of discrete buckets. All buckets below the cost value are set to 1.
+# Used to represent accumulated cost in the form of discrete buckets.
 def bucketize(x,n_buckets,max_x):
     out = np.zeros(n_buckets)
     for i in range(1,n_buckets+1):
+        #All buckets below the cost value are set to 1.
         if x>i*max_x/n_buckets:
             out[i-1]=1
     return out
@@ -16,16 +17,16 @@ def bucketize(x,n_buckets,max_x):
 class constraint_wrapper:
     def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=None,cost_penalty=0,
                  buckets=None,safe_policy=False):
-        self.base_env = env 
+        self.base_env = env # Use safety-gym environement as the base env
         self.buckets = buckets # no. of buckets for discretization
         # Adding cost dimension to observation space
-        if self.buckets is None: 
+        if self.buckets is None: # If scalar cost
             low = np.concatenate([env.observation_space.low,np.array([0])])
             high = np.concatenate([env.observation_space.high,np.array([np.inf])])
-        else:
+        else: # If discretized cost
             low = np.concatenate([env.observation_space.low,np.array([0 for i in range(self.buckets)])])
             high = np.concatenate([env.observation_space.high,np.array([np.inf for i in range(self.buckets)])])
-        self.observation_space = Box(low=low,high=high,dtype=np.float32) 
+        self.observation_space = Box(low=low,high=high,dtype=np.float32) # Augment observation space domain with cost domain
         self.action_space = env.action_space
         self.total_rews = [] # To store total episode returns
         self.total_costs = [] # To store total episode costs
@@ -44,13 +45,14 @@ class constraint_wrapper:
     def reset(self):
         self.penalty_given = False # Reset penalties
         if self.t > 0:
-            self.total_rews.append(self.reward_counter)
-            self.total_costs.append(self.cost_counter)
+            self.total_rews.append(self.reward_counter) # Add total episode rewards to rewards buffer.
+            self.total_costs.append(self.cost_counter) # Add total episode cost to rewards buffer.
         obs = self.base_env.reset()
         # Reset episode time, cost, and returns
         self.t = 0
         self.cost_counter = 0
         self.reward_counter = 0
+        # Return new cost-augmented observation
         if self.buckets is None:
             self.obs_old = np.concatenate([obs, [self.cost_counter]])
         else:
@@ -64,7 +66,7 @@ class constraint_wrapper:
         if self.safe_policy is not False:
             if self.cost_counter >= self.threshold:
                 action = self.safe_policy(torch.tensor(self.obs_old).to(self.device))
-        obs, reward, done, info = self.base_env.step(action)
+        obs, reward, done, info = self.base_env.step(action) # Base environment step
         self.reward_counter += reward # Update total episode reward
         self.cost_counter += info["cost"] # Update total episode cost
         self.t += 1
@@ -83,58 +85,3 @@ class constraint_wrapper:
         return self.obs_old, r_mod, done, info
     def render(self, mode='human'):
         return self.base_env.render(mode,camera_id=1)
-
-
-# Wrapper class for Safety-Gym
-class safetygymwrapper:
-    def __init__(self, env):
-        self.base_env = env
-    def reset(self):
-        return self.base_env.reset()
-    def step(self,action):
-        obs, reward, done, info = self.base_env.step(action)
-        cost = info["cost"] 
-        return obs, np.array([reward,cost]),done,None
-
-class fwrapper:
-    def __init__(self,env,f,gamma=[0.99,1],fdims=2,gamma_learner = 1):
-        self.base_env = env
-        self.fdims = fdims
-        self.f = f
-        low = np.concatenate([env.observation_space.low,np.array([0]+[-np.inf for i in self.fdims])])
-        high = np.concatenate([env.observation_space.high,np.array([np.inf]+[np.inf for i in self.fdims])])
-        self.observation_space = Box(low=low,high=high,dtype=np.float32)
-        self.action_space = env.action_space
-        #
-        if type(gamma) == float or type(gamma) == int:
-            self.gamma=np.array([gamma for i in range(self.fdims)])
-        else:
-            self.gamma = np.array(gamma)
-            assert len(gamma) == self.fdims
-        self.gamma_learner = gamma_learner
-        self.t = -1
-        self.episode_rewards_disc = []
-        self.episode_rewards_nodisc = []
-    def reset(self):
-        if self.t>0:
-            self.episode_rewards_disc.append(self.r_disc)
-            self.episode_rewards_nodisc.append(self.r_nodisc)
-        obs = self.base_env.reset()
-        self.t = 0
-        self.r_disc = np.array([0 for i in range(self.fdims)])
-        self.r_nodisc = np.array([0 for i in range(self.fdims)])
-        return np.concatenate([obs,np.array([self.t]),self.r_disc])
-    def step(self,action):
-        obs, rewards, done, _ = self.base_env.step(action)
-        f_old = self.f(rewards)
-        self.r_disc += (self.gamma**self.t)*rewards
-        self.r_nodisc += rewards
-        f_rew = (self.f(rewards)-f_old)/(self.gamma_learner**self.t)
-        self.t += 1
-        return np.concatenate([obs, np.array([self.t]), self.r_disc]), f_rew ,done, None
-
-
-
-
-
-

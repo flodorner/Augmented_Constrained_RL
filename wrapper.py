@@ -46,7 +46,7 @@ class constraint_wrapper:
             self.total_rews.append(self.reward_counter) # Add total episode rewards to rewards buffer.
             self.total_costs.append(self.cost_counter) # Add total episode cost to rewards buffer.
         if self.adaptive:
-            if len(self.total_costs)>len(self.adaptive):
+            if len(self.total_costs)>=len(self.adaptive):
                 slope,intercept,_,__,___= stat.linregress(self.adaptive,self.total_costs)
                 self.adaptive.append(min(self.max_penalty,max((self.threshold-intercept)/slope,0)))
             self.add_penalty = self.adaptive[len(self.total_costs)]

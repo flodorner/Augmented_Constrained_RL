@@ -67,11 +67,11 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=1,cost_penalty=0,buc
 
     #Ideally, you would separate train and test runs more directly here rather than reylying on the alg to work exactly as described...
     # Store training results in pickle file
-    with open("results/"+filename+"rews.pkl", 'wb') as f:
+    with open(filename+"rews.pkl", 'wb') as f:
         pickle.dump(env.total_rews, f)
-    with open("results/"+filename+"costs.pkl", 'wb') as f:
+    with open(filename+"costs.pkl", 'wb') as f:
         pickle.dump(env.total_costs, f)
     if env.adaptive:
-        with open("results/" + filename + "pens.pkl", 'wb') as f:
+        with open(filename + "pens.pkl", 'wb') as f:
             pickle.dump(env.adaptive, f)
 

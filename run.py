@@ -15,14 +15,14 @@ def experiment_1():
     name = "sac_adaptive"
     sys.stdout = open(folder + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=10001, alpha=None, epochs=100, start_steps=10000, filename=folder + name,
-            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[100 for i in range(100)],adaptive_len=10,
-            max_penalty=100)
+            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[30 for i in range(100)],adaptive_len=10,
+            max_penalty=30)
 
     name = "sac_adaptive_m0"
     sys.stdout = open(folder + name + "log.txt", 'w')
     run_exp(alg="sac", steps_per_epoch=10001, alpha=None, epochs=100, start_steps=10000, filename=folder + name,
-            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[100 for i in range(100)],adaptive_len=10,
-            max_penalty=100,mult_penalty=0)
+            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[30 for i in range(100)],adaptive_len=10,
+            max_penalty=30,mult_penalty=0)
 
     return None
 

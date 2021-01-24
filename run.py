@@ -14,23 +14,23 @@ def experiment_1():
 
     name = "sac_b1"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, num_test_episodes=10, alpha=None, add_penalty=1,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=0,entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=1,
+            epochs=10, start_steps=10000, filename=folder + name, buckets=26,entropy_constraint=-1)
 
     name = "sac_b10"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, num_test_episodes=10, alpha=None, add_penalty=10,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=0,entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001,  alpha=None, add_penalty=10,
+            epochs=10, start_steps=10000, filename=folder + name, buckets=26,entropy_constraint=-1)
 
     name = "sac_b1_m0"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, num_test_episodes=10, alpha=None, add_penalty=1, mult_penalty=0,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=0, entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=1, mult_penalty=0,
+            epochs=10, start_steps=10000, filename=folder + name, buckets=26, entropy_constraint=-1)
 
     name = "sac_b10_m0"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, num_test_episodes=10, alpha=None, add_penalty=10, mult_penalty=0,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=0, entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=10, mult_penalty=0,
+            epochs=10, start_steps=10000, filename=folder + name, buckets=26, entropy_constraint=-1)
 
     return None
 

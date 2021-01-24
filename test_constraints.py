@@ -15,7 +15,7 @@ import torch
 def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=1,cost_penalty=0,buckets=None,
          epochs=30,start_steps=10000,ac_kwargs={"hidden_sizes":(256,256)},
             entropy_constraint=-1,filename="",steps_per_epoch=10001,
-            act_noise=0.1,env_name='Safexp-PointGoal1-v0',batch_size=100):
+            act_noise=0.1,env_name='Safexp-PointGoal1-v0',batch_size=100,adaptive=False,adaptive_len=10,max_penalty=100):
 
     # alg determines whether sac, ppo or td3 is used.
     # alpha is the exploration parameter in sac. Add_parameter is Beta from the proposal.
@@ -41,7 +41,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=1,cost_penalty=0,buc
     env = gym.make(env_name) # Create an instance of the safety-gym environment.
     # Create an instance of the constrained environment.
     env = constraint_wrapper(env,add_penalty=add_penalty,mult_penalty=mult_penalty,
-                             cost_penalty=cost_penalty,buckets=buckets)
+                             cost_penalty=cost_penalty,buckets=buckets,adaptive=adaptive,adaptive_len=adaptive_len,max_penalty=max_penalty)
     logger_kwargs = setup_logger_kwargs(filename+"policy",data_dir="results/")
     assert alg == "sac" or alg == "td3" or alg == "ppo"
     # Select learning method
@@ -71,4 +71,7 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=1,cost_penalty=0,buc
         pickle.dump(env.total_rews, f)
     with open("results/"+filename+"costs.pkl", 'wb') as f:
         pickle.dump(env.total_costs, f)
+    if env.adaptive:
+        with open("results/" + filename + "pens.pkl", 'wb') as f:
+            pickle.dump(env.adaptive, f)
 

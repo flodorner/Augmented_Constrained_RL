@@ -12,25 +12,17 @@ def experiment_1():
     folder = "results/report/experiment_1/"
     checked_mkdir(folder)
 
-    name = "sac_b1"
+    name = "sac_adaptive"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=1,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=26,entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, epochs=100, start_steps=10000, filename=folder + name,
+            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[100 for i in range(100)],adaptive_len=10,
+            max_penalty=100)
 
-    name = "sac_b10"
+    name = "sac_adaptive_m0"
     sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001,  alpha=None, add_penalty=10,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=26,entropy_constraint=-1)
-
-    name = "sac_b1_m0"
-    sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=1, mult_penalty=0,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=26, entropy_constraint=-1)
-
-    name = "sac_b10_m0"
-    sys.stdout = open(folder + name + "log.txt", 'w')
-    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, add_penalty=10, mult_penalty=0,
-            epochs=10, start_steps=10000, filename=folder + name, buckets=26, entropy_constraint=-1)
+    run_exp(alg="sac", steps_per_epoch=10001, alpha=None, epochs=100, start_steps=10000, filename=folder + name,
+            buckets=26,entropy_constraint=-1,adaptive=[0 for i in range(100)]+[100 for i in range(100)],adaptive_len=10,
+            max_penalty=100,mult_penalty=0)
 
     return None
 

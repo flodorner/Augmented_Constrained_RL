@@ -1,6 +1,7 @@
 import gym
 from gym.spaces import Box
 import numpy as np
+import scipy.stats as stat
 import torch
 
 # Used to represent accumulated cost in the form of discrete buckets.
@@ -15,7 +16,7 @@ def bucketize(x,n_buckets,max_x):
 # Wrapper around the safety-gym env class
 class constraint_wrapper:
     def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=1,cost_penalty=0,
-                 buckets=None):
+                 buckets=None,adaptive=False,adaptive_len=10,max_penalty=100):
         self.base_env = env # Use safety-gym environement as the base env
         self.buckets = buckets # no. of buckets for discretization
         # Adding cost dimension to observation space
@@ -34,12 +35,21 @@ class constraint_wrapper:
         self.threshold = threshold # threshold value for cost
         self.mult_penalty = mult_penalty # If mult_penalty is not None, all rewards get multiplied by it once the constraint is violated.
         self.cost_penalty = cost_penalty # cost_penalty is equal to zeta from the proposal.
-        # use a safe_policy if constraint voilated
+        if adaptive:
+            self.adaptive = adaptive
+            self.adaptive_len = adaptive_len
+            self.add_penalty = adaptive[0]
+            self.max_penalty=max_penalty
 
     def reset(self):
         if self.t > 0:
             self.total_rews.append(self.reward_counter) # Add total episode rewards to rewards buffer.
             self.total_costs.append(self.cost_counter) # Add total episode cost to rewards buffer.
+        if self.adaptive:
+            if len(self.total_costs)>len(self.adaptive):
+                slope,intercept,_,__,___= stat.linregress(self.adaptive,self.total_costs)
+                self.adaptive.append(min(self.max_penalty,max((self.threshold-intercept)/slope,0)))
+            self.add_penalty = self.adaptive[len(self.total_costs)]
         obs = self.base_env.reset()
         # Reset episode time, cost, and returns
         self.t = 0

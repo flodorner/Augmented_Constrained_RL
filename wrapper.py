@@ -14,7 +14,7 @@ def bucketize(x,n_buckets,max_x):
 
 # Wrapper around the safety-gym env class
 class constraint_wrapper:
-    def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=None,cost_penalty=0,
+    def __init__(self, env,add_penalty=10,threshold=25,mult_penalty=1,cost_penalty=0,
                  buckets=None):
         self.base_env = env # Use safety-gym environement as the base env
         self.buckets = buckets # no. of buckets for discretization

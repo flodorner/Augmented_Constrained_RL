@@ -12,7 +12,7 @@ import os
 from datetime import datetime
 import torch
 
-def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,buckets=None,
+def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=1,cost_penalty=0,buckets=None,
          epochs=30,start_steps=10000,ac_kwargs={"hidden_sizes":(256,256)},
             entropy_constraint=-1,filename="",steps_per_epoch=10001,
             act_noise=0.1,env_name='Safexp-PointGoal1-v0',batch_size=100):
@@ -31,8 +31,6 @@ def run_exp(alg="sac",alpha=None,add_penalty=1,mult_penalty=None,cost_penalty=0,
     # Steps_per epoch determines the amount of environment interaction per epoch. Num_test episodes the amount of test_episodes
     # (only for evaluation) that are performed after each epoch. act_noise controls the exploration noise used in the td3 algorithm.
     # Entropy_constraint is the entropy to aim for (if sac is used with trainable alpha)
-    if mult_penalty == -1:
-        mult_penalty = None
     if buckets == -1:
         buckets = None
     if entropy_constraint == 0:
